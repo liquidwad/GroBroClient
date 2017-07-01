@@ -14,7 +14,7 @@ class BME280Sensor(CloudSensor):
 
         if(bme280 == None):
             try:
-                bme280 = BME280(address=0x76)
+                bme280 = BME280(t_mode=BME280_OSAMPLE_8, p_mode=BME280_OSAMPLE_8, h_mode=BME280_OSAMPLE_8, address=0x76)
             except Exception, e:
                 bme280 = None
         self.device = bme280
@@ -27,13 +27,13 @@ class BME280Sensor(CloudSensor):
         startTime = time.time()
         while (time.time() - startTime) < timeout:
             try:
-                meas = self.device.read_humidity()
+                meas = self.deviceMeasure();
                 if( self.measureCheck(meas) ):
                     measurement = self.postMeasure(meas)
                     break;
             except Exception, e:
                 if VERBOSE == True:
-                    print e
+                    print "BME280 measure fail"
             time.sleep(0.2)
 
         return measurement
