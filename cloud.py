@@ -17,13 +17,15 @@ class CloudManager:
 
 	def connect(self, timeout):
 		self.cloudAPI.connect()
-		self.cloudAPI.register_device(self.key)
 		timeStart = time.time()
 		timePassed = 0
 		# Just block until the connection is successful
 		while((self.connected == False) and (timePassed < timeout)):
 			time.sleep(0.1)
 			timePassed = time.time() - timeStart
+		
+		if self.connected:
+			self.cloudAPI.register_device(self.key)
 
 		return self.connected
 
