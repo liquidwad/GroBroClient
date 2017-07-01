@@ -17,6 +17,9 @@ class BME280Sensor(CloudSensor):
                 bme280 = BME280(mode=BME280_OSAMPLE_8)
             except Exception, e:
                 bme280 = None
+                if(VERBOSE):
+                    print "Failed to initialize BME280:"
+                    print e
         self.device = bme280
         self.reportAvailability(self.device is not None)
 
