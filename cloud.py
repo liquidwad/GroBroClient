@@ -7,11 +7,11 @@ class CloudManager:
 	def __init__(self, host, key):
 		self.key = key
 		cloudAPI = GroBroAPI(host)
-		cloudAPI.register_callback('connect', connected)
-		cloudAPI.register_callback('disconnect', disconnected)
-		cloudAPI.register_callback('reconnect', reconnected)
-		cloudAPI.register_callback('update', update)
-		cloudAPI.register_callback('pull', pull)
+		cloudAPI.register_callback('connect', self.connected)
+		cloudAPI.register_callback('disconnect', self.disconnected)
+		cloudAPI.register_callback('reconnect', self.reconnected)
+		cloudAPI.register_callback('update', self.update)
+		cloudAPI.register_callback('pull', self.pull)
 		self.cloudAPI = cloudAPI
 		self.connected = False
 
@@ -35,9 +35,8 @@ class CloudManager:
 	def subscribe(self, subscriber, channel):
 		self.subscribers[channel].append(subscriber)
 
-	def publish(self, channel, data):
-		#api.push({u'channel_name': u'Ventilator', u'data': {u'override': True, u'status': u'on'}}
-		api.push({u'channel_name': channel, u'data': data})
+	def publish(self, channel, type, available, data):
+		api.push({u'channel_name': channel, type: 'type', 'available': available, u'data': data})
 
 	def connected(self):
 		print "connected"
