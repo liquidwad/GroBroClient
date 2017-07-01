@@ -92,7 +92,9 @@ class CloudSensor(CloudDevice):
 	def reportAvailability(self, available):
 		#for this to work we have to change the method of pushing
 		self.publish(self.name, 'sensor', available, None)
-
+		if(VERBOSE and available):
+			print self.name + " sensor was detected"
+		
 
 	def measureThread(self):
 		while self.stopped is False:
@@ -102,6 +104,9 @@ class CloudSensor(CloudDevice):
 				self.publish(self.name,'sensor', True, { 'value': value })
 				if(VERBOSE):
 					print('%s: %d' % (self.name, value))
+			elif(VERBOSE):
+				print self.name + "sensor measurement returned none"
+				
 					
 			deltaTime = time.time() - startTime
 			remainingTime = self.measureInterval - deltaTime
