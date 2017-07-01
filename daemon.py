@@ -23,7 +23,8 @@ if __name__ == "__main__":
 		#TODO: implement recovery actio
 	
 	try:
-		cloud.wait(20)
+		while(True):
+			cloud.wait(1)
 	except KeyboardInterrupt:
 		pass
 	finally:
