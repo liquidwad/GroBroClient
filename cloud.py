@@ -93,15 +93,16 @@ class CloudSensor(CloudDevice):
 		#for this to work we have to change the method of pushing
 		self.publish(self.name, 'sensor', available, None)
 
+
 	def measureThread(self):
 		while self.stopped is False:
 			startTime = time.time()
 			value = self.measure()
-			publish({u'value' : value})
+			self.publish(self.name,'sensor', True, { 'value': value })
 			deltaTime = time.time() - startTime
 			remainingTime = self.measureInterval - deltaTime
 			if(remainingTime > 0):
-				cloud.wait(remainingTime)
+				time.sleep(remainingTime)
 
 	def measure(self):
 		return none
