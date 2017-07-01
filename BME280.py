@@ -14,7 +14,7 @@ class BME280Sensor(CloudSensor):
 
         if(bme280 == None):
             try:
-                bme280 = BME280(t_mode=BME280_OSAMPLE_8, p_mode=BME280_OSAMPLE_8, h_mode=BME280_OSAMPLE_8, address=0x76)
+                bme280 = BME280(mode=BME280_OSAMPLE_8)
             except Exception, e:
                 bme280 = None
         self.device = bme280
