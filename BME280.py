@@ -75,6 +75,6 @@ class TemperatureSensor(BME280Sensor):
     def postMeasure(self, measurement):
         if not self.celcius:
             # convert from celcius to fahrenheit
-            measurement = temp*1.8 + 32
+            measurement = measurement*1.8 + 32
 
         return measurement
