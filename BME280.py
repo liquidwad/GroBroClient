@@ -56,7 +56,7 @@ class HumiditySensor(BME280Sensor):
         BME280Sensor.__init__(self,name, cloud, measureInterval)
 
     def deviceMeasure(self):
-        hum = self.device.read_humidity()
+        return self.device.read_humidity()
 
     def measureCheck(self, measurement):
          return (measurement is not None) and (measurement < 100) and (measurement > 20)
@@ -67,7 +67,7 @@ class TemperatureSensor(BME280Sensor):
         self.celcius = celcius
 
     def deviceMeasure(self):
-        hum = self.device.read_temperature()
+        return self.device.read_temperature()
 
     def measureCheck(self, measurement):
          return (measurement is not None) and (measurement < 60) and (measurement > 0)
