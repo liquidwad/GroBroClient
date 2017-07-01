@@ -22,4 +22,10 @@ if __name__ == "__main__":
 		print "Failed to connect to cloud."
 		#TODO: implement recovery actio
 	
-	cloud.wait(20)
+	try:
+		cloud.wait(20)
+	except KeyboardInterrupt:
+		pass
+	finally:
+		for sensor in sensors:
+			sensor.stop()
