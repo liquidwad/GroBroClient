@@ -98,9 +98,11 @@ class CloudSensor(CloudDevice):
 		while self.stopped is False:
 			startTime = time.time()
 			value = self.measure()
-			if(VERBOSE and value is not None):
-				print('%s: %d' % (self.name, value))
-			self.publish(self.name,'sensor', True, { 'value': value })
+			if value is not None:
+				self.publish(self.name,'sensor', True, { 'value': value })
+				if(VERBOSE):
+					print('%s: %d' % (self.name, value))
+					
 			deltaTime = time.time() - startTime
 			remainingTime = self.measureInterval - deltaTime
 			if(remainingTime > 0):
