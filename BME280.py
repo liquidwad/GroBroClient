@@ -20,7 +20,7 @@ class BME280Sensor(CloudSensor):
         self.device = bme280
         self.reportAvailability(self.device is not None)
 
-    def measure(self, timeout):
+    def measure(self, timeout = BME280_TIMEOUT):
         if(self.device is None):
             return None
         measurement = None
