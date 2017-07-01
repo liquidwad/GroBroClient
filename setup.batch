@@ -1,0 +1,9 @@
+sudo apt-get update
+sudo apt-get install build-essential python-pip python-dev python-smbus git
+git clone https://github.com/adafruit/Adafruit_Python_GPIO.git
+cd Adafruit_Python_GPIO
+sudo python setup.py install
+cd ..
+git clone https://github.com/adafruit/Adafruit_Python_BME280.git
+cd Adafruit_Python_BME280
+sudo python setup.py install

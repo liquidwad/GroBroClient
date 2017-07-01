@@ -157,7 +157,7 @@ class WebsocketTransport(AbstractTransport):
         engineIO_packet_type, engineIO_packet_data = parse_packet_text(
             packet_text)
 
-        print engineIO_packet_type, engineIO_packet_data
+        #print engineIO_packet_type, engineIO_packet_data
         yield engineIO_packet_type, engineIO_packet_data
 
     def send_packet(self, engineIO_packet_type, engineIO_packet_data=''):

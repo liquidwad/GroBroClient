@@ -7,49 +7,47 @@ class CloudManager:
 	def __init__(self, host, key):
 		self.key = key
 		cloudAPI = GroBroAPI(host)
-		cloudAPI.register_callback('connect', self.connected)
-		cloudAPI.register_callback('disconnect', self.disconnected)
-		cloudAPI.register_callback('reconnect', self.reconnected)
-		cloudAPI.register_callback('update', self.update)
-		cloudAPI.register_callback('pull', self.pull)
+		cloudAPI.register_callback('connect', self.on_connected)
+		cloudAPI.register_callback('disconnect', self.on_disconnected)
+		cloudAPI.register_callback('reconnect', self.on_reconnected)
+		cloudAPI.register_callback('update', self.on_update)
+		cloudAPI.register_callback('pull', self.on_pull)
 		self.cloudAPI = cloudAPI
 		self.connected = False
+		self.subscribers = {}
 
-	def connect(self, timeout):
+	def wait(self, sec):
+		self.cloudAPI.wait(sec)
+	def connect(self):
 		self.cloudAPI.connect()
-		timeStart = time.time()
-		timePassed = 0
-		# Just block until the connection is successful
-		while((self.connected == False) and (timePassed < timeout)):
-			time.sleep(0.1)
-			timePassed = time.time() - timeStart
-		
-		if self.connected:
-			self.cloudAPI.register_device(self.key)
-
-		return self.connected
+		return True
 
 	def pullUpdates(self):
 		self.cloudAPI.pull()
 
 	def subscribe(self, subscriber, channel):
-		self.subscribers[channel].append(subscriber)
+		try:
+			self.subscribers[channel].append(subscriber)
+		except KeyError, e:
+			self.subscribers[channel] = []
+			self.subscribers[channel].append(subscriber)
 
-	def publish(self, channel, type, available, data):
-		api.push({u'channel_name': channel, type: 'type', 'available': available, u'data': data})
+	def publish(self, channel, cloud_type, available, data):
+		self.cloudAPI.push({'channel_name': channel, 'type': cloud_type, 'available': available, 'data': data})
 
-	def connected(self):
+	def on_connected(self):
 		print "connected"
+		self.cloudAPI.register_device(self.key)
 		self.connected = True
 
-	def disconnected(self):
+	def on_disconnected(self):
 		print "disconnected"
 
-	def reconnected(self):
+	def on_reconnected(self):
 		print "reconnected"
 		self.cloudAPI.register_device(self.key)
 
-	def update(self, data):
+	def on_update(self, data):
 		try:
 			subscribers = self.subscribers[data.channel_name]
 			for subscriber in subscribers:
@@ -57,45 +55,46 @@ class CloudManager:
 		except Exception, e:
 			pass
 
-	def pull(self, data):
-		if(VERBOSE is True):
-			print "Pulled: " + data
+	def on_pull(self, data):
+		if VERBOSE is True:
+			print "Pulled: ", data
 
 
 class CloudDevice:
 	def __init__(self, name, cloud):
 		self.name = name
 		self.cloud = cloud
-		self.cloud.subscribe(self, name)
+		#self.cloud.subscribe(self, name)
 
 	def onUpdate(self, data):
-		if(VERBOSE == True):
+		if VERBOSE:
 			print('%s got update:' % self.name)
 			print data
 
-	def publish(self,data):
-		self.cloud.publish(self.name, data)
+	def publish(self, channel, cloud_type, available, data):
+		self.cloud.publish(channel, cloud_type, available, data)
 
 
 class CloudActuator(CloudDevice):
 	def __init__(self, name, cloud, type):
 		CloudDevice.__init__(self, name, cloud)
 		self.type = type
+		self.cloud.subscribe(self, name)
 
 class CloudSensor(CloudDevice):
 	def __init__(self, name, cloud, measureInterval):
 		CloudDevice.__init__(self, name, cloud)
-		self.thread = threading.Thread(target = measureThread)
+		self.thread = threading.Thread(target = self.measureThread)
 		self.stopped = True
 		self.measureInterval = measureInterval
 		self.device = None
 
 	def reportAvailability(self, available):
-		publish(u'available': available)
-
+		#for this to work we have to change the method of pushing
+		self.publish(self.name, 'sensor', available, None)
 
 	def measureThread(self):
-		while(!self.stopped):
+		while self.stopped is False:
 			startTime = time.time()
 			value = measure()
 			publish({u'value' : value})
@@ -108,7 +107,7 @@ class CloudSensor(CloudDevice):
 		return none
 
 	def start(self):
-		if(self.device is not None):
+		if self.device is not None:
 			self.stopped = False
 			self.thread.start()
 		else:

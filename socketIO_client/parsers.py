@@ -85,7 +85,6 @@ def parse_socketIO_packet_data(socketIO_packet_data):
         args = []
     if isinstance(args, six.string_types):
         args = [args]
-
     return SocketIOData(path=path, ack_id=ack_id, args=args)
 
 
@@ -122,24 +121,9 @@ def _make_packet_prefix(packet):
 
 
 def _read_packet_length(content, content_index):
-    #print content
-    decoded_content = content.decode()
-    start = 0
-
-    #Check if it's a EVNT Packet
-    if int(decoded_content[content_index:content_index+1]) == '2:':
-        start=7
-        content_index = 7
-
-    #Check if it's has been parsed before
-    if content_index != 0:
-        start = content_index
-
-    while decoded_content[content_index] != ':':
+    while content.decode()[content_index] != ':':
         content_index += 1
-
-    packet_length_string = decoded_content[start:content_index]
-
+    packet_length_string = content.decode()[0:content_index]
     return content_index, int(packet_length_string)
 
 

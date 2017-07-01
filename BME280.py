@@ -9,13 +9,16 @@ bme280 = None
 class BME280Sensor(CloudSensor):
     def __init__(self, name, cloud, measureInterval):
         CloudSensor.__init__(self, name, cloud, measureInterval)
+        
+        global bme280
+
         if(bme280 == None):
             try:
                 bme280 = BME280(mode=BME280_OSAMPLE_8)
             except Exception, e:
                 bme280 = None
         self.device = bme280
-        CloudSensor.reportAvailability(self.device!=None)
+        self.reportAvailability(self.device is not None)
 
     def measure(self, timeout):
         if(self.device is None):
@@ -25,8 +28,8 @@ class BME280Sensor(CloudSensor):
         while (time.time() - startTime) < timeout:
             try:
                 meas = self.device.read_humidity()
-                if( measureCheck(meas) )
-                    measurement = postMeasure(meas)
+                if( self.measureCheck(meas) ):
+                    measurement = self.postMeasure(meas)
                     break;
             except Exception, e:
                 if VERBOSE == True:
@@ -46,7 +49,7 @@ class BME280Sensor(CloudSensor):
 
 class HumiditySensor(BME280Sensor):
     def __init__(self, name, cloud, measureInterval = 5):
-        BME280Sensor.__init__(name, cloud, measureInterval)
+        BME280Sensor.__init__(self,name, cloud, measureInterval)
 
     def deviceMeasure(self):
         hum = self.device.read_humidity()
@@ -56,7 +59,7 @@ class HumiditySensor(BME280Sensor):
 
 class TemperatureSensor(BME280Sensor):
     def __init__(self, name, cloud, measureInterval = 5, celcius = False):
-        BME280Sensor.__init__(name, cloud, measureInterval)
+        BME280Sensor.__init__(self, name, cloud, measureInterval)
         self.celcius = celcius
 
     def deviceMeasure(self):
@@ -65,8 +68,8 @@ class TemperatureSensor(BME280Sensor):
     def measureCheck(self, measurement):
          return (measurement is not None) and (measurement < 60) and (measurement > 0)
 
-    def postMeasure(sef, measurement):
-        if(!self.celcius):
+    def postMeasure(self, measurement):
+        if not self.celcius:
             # convert from celcius to fahrenheit
             measurement = temp*1.8 + 32
 
