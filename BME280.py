@@ -33,7 +33,7 @@ class BME280Sensor(CloudSensor):
                     break;
             except Exception, e:
                 if VERBOSE == True:
-                    print "BME280 measure fail"
+                    print "BME280 measure fail: " + e
             time.sleep(0.2)
 
         return measurement
