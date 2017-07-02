@@ -46,10 +46,16 @@ class CloudManagerThread(threading.Thread):
 		cloud.reset_pull_data()
 
 		print "Starting measurements..."
+
 		for sensor in sensors:
 			sensor.start()
 
-
+		try:
+			while True:
+				time.sleep(1)
+		except KeyboardInterrupt:
+			pass
+		
 if __name__ == "__main__":
 	cloud_thread = CloudStartupThread()
 	cloud_thread.daemon = True
