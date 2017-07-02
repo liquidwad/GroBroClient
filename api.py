@@ -15,12 +15,12 @@ class Cache:
 	@staticmethod
 	def put_cache(channels):
 		s = shelve.open(__CACHE__FILE__, writeback=True)
-
+		
 		try:
 			for channel in channels:
-				print channel
+				#print channel
 				channel_name = channel['channel_name'].encode('ascii','ignore')
-				s[channel_name] = channel['data']
+				s[channel_name] = channel
 			print "Cache has been synced"
 		finally:
 			s.close()
@@ -28,10 +28,10 @@ class Cache:
 	@staticmethod
 	def update_cache(channel):
 		s = shelve.open(__CACHE__FILE__, writeback=True)
-
+		
 		try:
 			channel_name = channel['channel_name'].encode('ascii','ignore')
-			s[channel_name] = channel['data']
+			s[channel_name] = channel.update(channel)
 			print channel_name, " updated in cache"
 		finally:
 			s.close()

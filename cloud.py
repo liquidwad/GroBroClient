@@ -6,24 +6,25 @@ import time
 class CloudManager:
 	def __init__(self, host, key):
 		self.key = key
-		cloudAPI = GroBroAPI(host)
-		cloudAPI.register_callback('connect', self.on_connected)
-		cloudAPI.register_callback('disconnect', self.on_disconnected)
-		cloudAPI.register_callback('reconnect', self.on_reconnected)
-		cloudAPI.register_callback('update', self.on_update)
-		cloudAPI.register_callback('pull', self.on_pull)
-		self.cloudAPI = cloudAPI
+		self.cloud_api = GroBroAPI(host)
+		self.cloud_api.register_callback('connect', self.on_connected)
+		self.cloud_api.register_callback('disconnect', self.on_disconnected)
+		self.cloud_api.register_callback('reconnect', self.on_reconnected)
+		self.cloud_api.register_callback('update', self.on_update)
+		self.cloud_api.register_callback('pull', self.on_pull)
 		self.connected = False
 		self.subscribers = {}
+		self.pulled_data = None
 
 	def wait(self, sec):
-		self.cloudAPI.wait(sec)
-	def connect(self):
-		self.cloudAPI.connect()
-		return True
+		self.cloud_api.wait(sec)
 
-	def pullUpdates(self):
-		self.cloudAPI.pull()
+	def connect(self):
+		print "Connecting"
+		self.cloud_api.connect()
+
+	def pull_updates(self):
+		self.cloud_api.pull()
 
 	def subscribe(self, subscriber, channel):
 		try:
@@ -32,26 +33,28 @@ class CloudManager:
 			self.subscribers[channel] = []
 			self.subscribers[channel].append(subscriber)
 
-	def publish(self, channel, cloud_type, available, data):
-		self.cloudAPI.push({'channel_name': channel, 'type': cloud_type, 'available': available, 'data': data})
+	def publish(self, data):
+		self.cloud_api.push(data)
 
 	def on_connected(self):
-		print "connected"
-		self.cloudAPI.register_device(self.key)
+		print "Connected"
+		self.cloud_api.register_device(self.key)
 		self.connected = True
 
 	def on_disconnected(self):
-		print "disconnected"
+		print "Disconnected"
+		self.connected = False
 
 	def on_reconnected(self):
-		print "reconnected"
-		self.cloudAPI.register_device(self.key)
+		print "Reconnected"
+		self.cloud_api.register_device(self.key)
+		self.connected = True
 
 	def on_update(self, data):
 		try:
 			subscribers = self.subscribers[data.channel_name]
 			for subscriber in subscribers:
-				subscriber.onUpdate(data)
+				subscriber.on_update(data)
 		except Exception, e:
 			pass
 
@@ -62,29 +65,28 @@ class CloudManager:
 		for chan in data:
 			self.on_update(chan)
 			
-			
+		self.pulled_data = data
+		
+	
+	def reset_pull_data(self):
+		self.pulled_data = None
 
 
 class CloudDevice:
 	def __init__(self, name, cloud):
 		self.name = name
 		self.cloud = cloud
-		#self.cloud.subscribe(self, name)
+		self.override = False
 
-	def onUpdate(self, data):
+	def on_update(self, data):
 		if VERBOSE:
 			print('%s got update:' % self.name)
 			print data
 
-	def publish(self, channel, cloud_type, available, data):
-		self.cloud.publish(channel, cloud_type, available, data)
-
-
 class CloudActuator(CloudDevice):
-	def __init__(self, name, cloud, type):
+	def __init__(self, name, cloud):
 		CloudDevice.__init__(self, name, cloud)
 		self.type = type
-		self.cloud.subscribe(self, name)
 
 class CloudSensor(CloudDevice):
 	def __init__(self, name, cloud, measureInterval):
@@ -93,20 +95,22 @@ class CloudSensor(CloudDevice):
 		self.stopped = True
 		self.measureInterval = measureInterval
 		self.device = None
+		self.type = "Sensor"
+		self.available = False
 
 	def reportAvailability(self, available):
-		#for this to work we have to change the method of pushing
-		self.publish(self.name, 'sensor', available, None)
+		self.available = available
+		self.cloud.publish({'channel_name': self.name, 'available': self.available })
+
 		if(VERBOSE and available):
 			print self.name + " sensor was detected"
-		
 
 	def measureThread(self):
 		while self.stopped is False:
 			startTime = time.time()
 			value = self.measure()
 			if value is not None:
-				self.publish(self.name,'sensor', True, { 'override':True, 'status': value })
+				self.publish( {'channel_name': self.name, 'data': { 'override': self.override, 'status': value } } )
 				if(VERBOSE):
 					print('%s: %d' % (self.name, value))
 			elif(VERBOSE):
