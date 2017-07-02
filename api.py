@@ -18,7 +18,7 @@ class Cache:
 		
 		try:
 			for channel in channels:
-				print channel
+				#print channel
 				channel_name = channel['channel_name'].encode('ascii','ignore')
 				s[channel_name] = channel
 			print "Cache has been synced"

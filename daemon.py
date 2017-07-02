@@ -29,7 +29,6 @@ class CloudManagerThread(threading.Thread):
 			time.sleep(1)
 		
 		print "Initializing sensors..."
-
 		# During initialization, each sensor object will report to the cloud whether or not it is available 
 		temp_sensor = TemperatureSensor("temperature", cloud, measureInterval = TEMP_INTERVAL)
 		humidity_sensor = HumiditySensor("humidity", cloud, TEMP_INTERVAL)
@@ -38,6 +37,13 @@ class CloudManagerThread(threading.Thread):
 		# TODO: Initialize all actuators here and add them as cloud subscribers before starting the cloud connection
 		print "Pulling..."
 		cloud.pull_updates()
+
+		while not cloud.pulled_data:
+			pass
+
+		#Now we have the latest data and we initialize actuators
+		last_data = cloud.pulled_data
+		cloud.reset_pull_data()
 
 		print "Starting measurements..."
 		for sensor in sensors:

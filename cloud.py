@@ -14,6 +14,7 @@ class CloudManager:
 		self.cloud_api.register_callback('pull', self.on_pull)
 		self.connected = False
 		self.subscribers = {}
+		self.pulled_data = None
 
 	def wait(self, sec):
 		self.cloud_api.wait(sec)
@@ -60,6 +61,12 @@ class CloudManager:
 	def on_pull(self, data):
 		if VERBOSE is True:
 			print "Pulled: ", data
+		
+		self.pulled_data = data
+		
+	
+	def reset_pull_data(self):
+		self.pulled_data = None
 
 
 class CloudDevice:
@@ -77,7 +84,6 @@ class CloudActuator(CloudDevice):
 	def __init__(self, name, cloud):
 		CloudDevice.__init__(self, name, cloud)
 		self.type = type
-		self.cloud.subscribe(self, name)
 
 class CloudSensor(CloudDevice):
 	def __init__(self, name, cloud, measureInterval):
@@ -95,7 +101,6 @@ class CloudSensor(CloudDevice):
 
 		if(VERBOSE and available):
 			print self.name + " sensor was detected"
-		
 
 	def measureThread(self):
 		while self.stopped is False:
