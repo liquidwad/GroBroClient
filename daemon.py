@@ -3,6 +3,8 @@ from cloud import *
 from BME280 import *
 import threading
 import time
+import signal
+import sys
 
 cloud = None
 
@@ -53,6 +55,11 @@ class CloudManagerThread(threading.Thread):
 		while True:
 			time.sleep(100)
 		
+def signal_handler(signal, frame):
+	print('You pressed Ctrl+C!')
+	sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
 		
 if __name__ == "__main__":
 	cloud_thread = CloudStartupThread()
@@ -62,9 +69,6 @@ if __name__ == "__main__":
 	cloud_mananger_thread = CloudManagerThread()
 	cloud_mananger_thread.daemon = True
 	cloud_mananger_thread.start()
-
-	try:
-		cloud_mananger_thread.join(5)
-		cloud_thread.join(5)	
-	except KeyboardInterrupt, SystemExit:
+	
+	while True:
 		pass
