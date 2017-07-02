@@ -65,11 +65,14 @@ class CloudManager:
 		for chan in data:
 			self.on_update(chan)
 			
+			
+=======
 		self.pulled_data = data
 		
 	
 	def reset_pull_data(self):
 		self.pulled_data = None
+>>>>>>> refs/remotes/origin/master
 
 
 class CloudDevice:
@@ -110,7 +113,7 @@ class CloudSensor(CloudDevice):
 			startTime = time.time()
 			value = self.measure()
 			if value is not None:
-				self.cloud.publish( {'channel_name': self.name, 'data': { 'override': self.override, 'status': value } } )
+				self.publish( {'channel_name': self.name, 'data': { 'override': self.override, 'status': value } } )
 				if(VERBOSE):
 					print('%s: %d' % (self.name, value))
 			elif(VERBOSE):
