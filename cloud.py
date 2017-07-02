@@ -58,6 +58,11 @@ class CloudManager:
 	def on_pull(self, data):
 		if VERBOSE is True:
 			print "Pulled: ", data
+		
+		for chan in data:
+			self.on_update(chan)
+			
+			
 
 
 class CloudDevice:
