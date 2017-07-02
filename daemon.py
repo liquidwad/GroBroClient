@@ -49,12 +49,10 @@ class CloudManagerThread(threading.Thread):
 
 		for sensor in sensors:
 			sensor.start()
-
-		try:
-			while True:
-				time.sleep(1)
-		except KeyboardInterrupt:
-			pass
+		
+		while True:
+			time.sleep(100)
+		
 		
 if __name__ == "__main__":
 	cloud_thread = CloudStartupThread()
@@ -65,5 +63,8 @@ if __name__ == "__main__":
 	cloud_mananger_thread.daemon = True
 	cloud_mananger_thread.start()
 
-	cloud_mananger_thread.join()
-	cloud_thread.join()
+	try:
+		cloud_mananger_thread.join(5)
+		cloud_thread.join(5)	
+	except KeyboardInterrupt, SystemExit:
+		pass
