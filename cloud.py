@@ -71,7 +71,7 @@ class CloudManager:
 	def reset_pull_data(self):
 		self.pulled_data = None
 		
-	def get_value(self, data, channel):
+	def getValue(self, data, channel):
 		for chan in data:
 			if chan.channel_name is channel:
 				return chan.data.value
