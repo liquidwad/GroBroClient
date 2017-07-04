@@ -94,7 +94,7 @@ class CloudDevice:
 class CloudActuator(CloudDevice):
 	def __init__(self, name, cloud):
 		CloudDevice.__init__(self, name, cloud)
-		cloud.subscribe(this, name)
+		cloud.subscribe(self, name)
 	
 	def reportAvailability(self, available):
 		self.available = available
