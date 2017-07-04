@@ -11,7 +11,7 @@ class CloudRelay(CloudActuator):
 		self.relayNumber = relayNumber
 		GPIO.setwarnings(False)
 		GPIO.setmode(GPIO.BCM) # Broadcom pin-numbering scheme
-		GPIO.setup(channels[relayNumber], GPIO.OUT)
+		GPIO.setup(relay_gpio[relayNumber], GPIO.OUT)
 		self.state = initialState
 		self.reportAvailability(True)
 		self.changeValue(initialState)
