@@ -6,7 +6,7 @@ relay_gpio = [5,6,4,17,27,22,23,24]
 
 class CloudRelay(CloudActuator):
     def __init__(self, name, cloud, relayNumber, initialState = False):
-		CloudDevice.__init__(self, name, cloud)
+		CloudActuator.__init__(self, name, cloud)
 		global relay_gpio
 		self.relayNumber = relayNumber
 		GPIO.setwarnings(False)
