@@ -4,6 +4,8 @@ from BME280 import *
 from relay import *
 import threading
 import time
+import signal
+import sys
 
 cloud = None
 
@@ -65,10 +67,19 @@ class CloudManagerThread(threading.Thread):
 		sensors.extend([temp_sensor, humidity_sensor])
 
 		print "Starting measurements..."
+
 		for sensor in sensors:
 			sensor.start()
+		
+		while True:
+			time.sleep(100)
+		
+def signal_handler(signal, frame):
+	print('You pressed Ctrl+C!')
+	sys.exit(0)
 
-
+signal.signal(signal.SIGINT, signal_handler)
+		
 if __name__ == "__main__":
 	cloud_thread = CloudStartupThread()
 	cloud_thread.daemon = True
@@ -77,6 +88,6 @@ if __name__ == "__main__":
 	cloud_mananger_thread = CloudManagerThread()
 	cloud_mananger_thread.daemon = True
 	cloud_mananger_thread.start()
-
-	cloud_mananger_thread.join()
-	cloud_thread.join()
+	
+	while True:
+		pass
