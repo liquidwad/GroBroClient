@@ -1,4 +1,4 @@
-from cloud import CloudActuator
+from cloud import *
 from config import *
 import RPi.GPIO as GPIO
 
