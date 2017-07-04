@@ -18,7 +18,7 @@ class CloudRelay(CloudActuator):
 		   
     def changeValue(self, newValue):
         self.gpioState = GPIO.LOW if newValue else GPIO.HIGH
-        GPIO.output(channels[self.relayNumber], self.state) 
+        GPIO.output(relay_gpio[self.relayNumber], self.state) 
         if(VERBOSE):
             print('%s was turned %s' % (self.name, 'on' if newValue else 'off'))
     
