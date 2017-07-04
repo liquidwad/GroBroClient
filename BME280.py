@@ -1,4 +1,3 @@
-
 from cloud import CloudSensor
 from Adafruit_BME280 import *
 from config import *

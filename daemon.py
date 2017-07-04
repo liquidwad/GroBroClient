@@ -1,6 +1,7 @@
 from config import *
 from cloud import *
 from BME280 import *
+from relay import *
 import threading
 import time
 
@@ -24,15 +25,10 @@ class CloudManagerThread(threading.Thread):
 		global cloud
 
 		sensors = []
+		actuators = []
 		
 		while cloud == None or not cloud.connected:
 			time.sleep(1)
-		
-		print "Initializing sensors..."
-		# During initialization, each sensor object will report to the cloud whether or not it is available 
-		temp_sensor = TemperatureSensor("temperature", cloud, measureInterval = TEMP_INTERVAL)
-		humidity_sensor = HumiditySensor("humidity", cloud, TEMP_INTERVAL)
-		sensors.extend([temp_sensor, humidity_sensor])
 
 		# TODO: Initialize all actuators here and add them as cloud subscribers before starting the cloud connection
 		print "Pulling..."
@@ -43,7 +39,30 @@ class CloudManagerThread(threading.Thread):
 
 		#Now we have the latest data and we initialize actuators
 		last_data = cloud.pulled_data
+		
+		print "Initializing actuators..."
+		#If this is the first time we ever run, the server will have an empty pull
+		
+		if DEVICE_MODEL is 'WW8':
+			for i in range(0,7):
+				# During initialization, each actuator will report to the cloud that it is present
+				if last_data is None:
+					# Default initialValue will be False
+					actuators.append(CloudRelay("relay" + i, cloud, i))
+				else:
+					# Obtain this relay's initial state from the pulled data
+					initialValue = cloud.getValue(last_data, "relay"+i)
+					if initialValue is None:
+						initialValue = False
+					actuators.append(CloudRelay("relay" + i, cloud, i, initialValue))
+		
 		cloud.reset_pull_data()
+		
+		print "Initializing sensors..."
+		# During initialization, each sensor object will report to the cloud whether or not it is available 
+		temp_sensor = TemperatureSensor("temperature", cloud, measureInterval = TEMP_INTERVAL)
+		humidity_sensor = HumiditySensor("humidity", cloud, TEMP_INTERVAL)
+		sensors.extend([temp_sensor, humidity_sensor])
 
 		print "Starting measurements..."
 		for sensor in sensors:

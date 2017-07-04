@@ -70,13 +70,20 @@ class CloudManager:
 	
 	def reset_pull_data(self):
 		self.pulled_data = None
+		
+	def get_value(self, data, channel):
+		for chan in data:
+			if chan.channel_name is channel:
+				return chan.data.value
+		
+		return None
+		
 
 
 class CloudDevice:
 	def __init__(self, name, cloud):
 		self.name = name
 		self.cloud = cloud
-		self.override = False
 
 	def on_update(self, data):
 		if VERBOSE:
@@ -86,7 +93,20 @@ class CloudDevice:
 class CloudActuator(CloudDevice):
 	def __init__(self, name, cloud):
 		CloudDevice.__init__(self, name, cloud)
-		self.type = type
+		self.subscribe(this, name)
+	
+	def reportAvailability(self, available):
+		self.available = available
+		self.cloud.publish({'channel_name': self.name, 'available': self.available })
+
+		if(VERBOSE and available):
+			print self.name + " actuator was initialized"
+	
+	def changeValue(self, newValue):
+		pass
+
+
+		
 
 class CloudSensor(CloudDevice):
 	def __init__(self, name, cloud, measureInterval):
