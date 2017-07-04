@@ -50,13 +50,13 @@ class CloudManagerThread(threading.Thread):
 				# During initialization, each actuator will report to the cloud that it is present
 				if last_data is None:
 					# Default initialValue will be False
-					actuators.append(CloudRelay("relay" + i, cloud, i))
+					actuators.append(CloudRelay("relay" + str(i), cloud, i))
 				else:
 					# Obtain this relay's initial state from the pulled data
-					initialValue = cloud.getValue(last_data, "relay"+i)
+					initialValue = cloud.getValue(last_data, "relay"+ str(i))
 					if initialValue is None:
 						initialValue = False
-					actuators.append(CloudRelay("relay" + i, cloud, i, initialValue))
+					actuators.append(CloudRelay("relay" + str(i), cloud, i, initialValue))
 		
 		cloud.reset_pull_data()
 		
