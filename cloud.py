@@ -131,7 +131,7 @@ class CloudSensor(CloudDevice):
 			startTime = time.time()
 			value = self.measure()
 			if value is not None:
-				self.cloud.publish( {'channel_name': self.name, 'data': { 'override': self.override, 'status': value } } )
+				self.cloud.publish( {'channel_name': self.name, 'data': { 'status': value } } )
 				if(VERBOSE):
 					print('%s: %d' % (self.name, value))
 			elif(VERBOSE):
