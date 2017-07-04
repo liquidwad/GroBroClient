@@ -73,8 +73,9 @@ class CloudManager:
 		
 	def getValue(self, data, channel):
 		for chan in data:
-			if chan.channel_name is channel:
-				return chan.data.value
+			if chan['channel_name'] is channel:
+				state = chan['data'].status
+				return True if (state is 'on') else False
 		
 		return None
 		
