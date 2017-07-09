@@ -37,8 +37,9 @@ class CloudManagerThread(threading.Thread):
 		print "Pulling..."
 		cloud.pull_updates()
 
-		#while not cloud.pulled_data:
-		#	pass
+		# TODO: fix this because it will block forever if pulled data is empty
+		while cloud.data_pulled is False:
+			time.sleep(0.1)
 
 		#Now we have the latest data and we initialize actuators
 		last_data = cloud.pulled_data

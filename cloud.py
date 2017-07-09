@@ -66,10 +66,12 @@ class CloudManager:
 			self.on_update(chan)
 			
 		self.pulled_data = data
+		self.data_pulled = True
 		
 	
 	def reset_pull_data(self):
 		self.pulled_data = None
+		self.data_pulled = False
 		
 	def getValue(self, data, channel):
 		if data is None:
