@@ -14,7 +14,7 @@ class CloudLCD(CloudActuator):
         self.lcd.write_string(string)
     
     def clear(self):
-        self.clear()
+        self.lcd.clear()
         
     def on_update(self, data):
 		if VERBOSE:
