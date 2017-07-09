@@ -67,7 +67,7 @@ class CloudManagerThread(threading.Thread):
 			# Initialize relays
 			for i in range(0,8):
 				# Obtain this relay's initial state from the pulled data
-				initialValue = cloud.getValue(last_data, "relay"+ str(i))
+				initialValue = cloud.getValue(last_data, 'relay'+ str(i))
 				if initialValue is None:
 					initialValue = False
 				actuators.append(CloudRelay("relay" + str(i), cloud, i, initialValue))
