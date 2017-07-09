@@ -86,7 +86,7 @@ class CloudManager:
 			return None
 			
 		for chan in data:
-			if chan['channel_name'] is channel:
+			if chan['channel_name'] == channel:
 				state = chan['data']['status']
 				if state is not None:
 					print "Found status: " + state
@@ -102,7 +102,7 @@ class CloudManager:
 			return None
 		
 		for chan in pulled_data:
-			if chan['channel_name'] == channel:
+			if chan['channel_name'] is channel:
 				data = chan['data']
 				return data
 			
