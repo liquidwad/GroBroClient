@@ -54,6 +54,8 @@ class CloudManager:
 		self.connected = True
 
 	def on_update(self, data):
+		print "Got update:"
+		print data
 		try:
 			subscribers = self.subscribers[data.channel_name]
 			for subscriber in subscribers:
