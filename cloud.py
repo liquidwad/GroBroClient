@@ -15,6 +15,7 @@ class CloudManager:
 		self.connected = False
 		self.subscribers = {}
 		self.pulled_data = None
+		self.data_pulled = False
 
 	def wait(self, sec):
 		self.cloud_api.wait(sec)
