@@ -41,6 +41,7 @@ class RelayLCD(CloudLCD):
 			print('%s got update:' % self.name)
 			print data
 		
-		if((data is not None) and (data is not self.data)):
-		    self.data = data
-		    self.write(self.getDisplayString(data))
+		dat = data['data']
+		if((dat is not None) and (dat is not self.data)):
+		    self.data = dat
+		    self.write(self.getDisplayString(dat))

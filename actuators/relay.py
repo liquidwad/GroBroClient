@@ -31,9 +31,10 @@ class CloudRelay(CloudActuator):
 			print('%s got update:' % self.name)
 			print data
 		
-		if((data.value is not None) and (data.value is not self.state)):
-			self.state = data.value
-			self.changeValue(data.value)
+		state = data['data']['status']
+		if((state is not None) and (state is not self.state)):
+			self.state = state
+			self.changeValue(state)
 		    
 		    
 		
