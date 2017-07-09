@@ -78,14 +78,18 @@ class CloudManager:
 		self.pulled_data = None
 		self.data_pulled = False
 		
+	# TODO: optimize search
 	def getValue(self, data, channel):
 		if data is None:
 			return None
 			
 		for chan in data:
 			if chan['channel_name'] is channel:
-				state = chan['data'].status
-				return True if (state is 'on') else False
+				state = chan['data']['status']
+				if state is not None:
+					return state
+				else:
+					return None
 		
 		return None
 		
