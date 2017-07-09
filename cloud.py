@@ -87,6 +87,17 @@ class CloudManager:
 		
 		return None
 		
+	def getData(self, pulled_data, channel):
+		if pulled_data is None:
+			return None
+		
+		for chan in pulled_data:
+			if chan['channel_name'] is channel:
+				data = chan['data']
+				return data
+			
+		return None
+		
 
 
 class CloudDevice:
@@ -96,14 +107,14 @@ class CloudDevice:
 		self.channel_type = channel_type
 		self.channel_subtype = channel_subtype
 
-	def reportAvailability(self, available, status = None):
+	def reportAvailability(self, available, data = None):
 		self.available = available
 		self.cloud.publish({
 			'channel_name': self.name, 
 			'channel_type': self.channel_type, 
 			'channel_subtype': self.channel_subtype, 
 			'available': self.available,
-			'data': { 'status': status }})
+			'data': data})
 
 		if(VERBOSE and available):
 			print self.name + " " + self.channel_type + " " + self.channel_subtype + " was initialized"
