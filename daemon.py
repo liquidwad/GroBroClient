@@ -105,4 +105,5 @@ if __name__ == "__main__":
 	cloud_mananger_thread.start()
 	
 	while True:
-		cloud_mananger_thread.wait(999999)
+		if cloud:
+			cloud.wait(999999)
