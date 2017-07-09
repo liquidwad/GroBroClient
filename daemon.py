@@ -2,6 +2,7 @@ from config import *
 from cloud import *
 from sensors.BME280 import *
 from actuators.relay import *
+from actuators.lcd import *
 import threading
 import time
 import signal
@@ -36,8 +37,8 @@ class CloudManagerThread(threading.Thread):
 		print "Pulling..."
 		cloud.pull_updates()
 
-		while not cloud.pulled_data:
-			pass
+		#while not cloud.pulled_data:
+		#	pass
 
 		#Now we have the latest data and we initialize actuators
 		last_data = cloud.pulled_data
