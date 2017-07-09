@@ -87,7 +87,7 @@ class CloudManagerThread(threading.Thread):
 			sensor.start()
 		
 		while True:
-			time.sleep(100)
+			cloud.wait(999999)
 		
 def signal_handler(signal, frame):
 	print('You pressed Ctrl+C!')
@@ -105,5 +105,4 @@ if __name__ == "__main__":
 	cloud_mananger_thread.start()
 	
 	while True:
-		if cloud:
-			cloud.wait(999999)
+		pass
