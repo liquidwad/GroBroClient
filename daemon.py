@@ -24,6 +24,10 @@ class CloudManagerThread(threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
 	
+	def wait(self, seconds):
+		global cloud
+		cloud.wait(seconds)
+	
 	def run(self):
 		global cloud
 
@@ -101,4 +105,4 @@ if __name__ == "__main__":
 	cloud_mananger_thread.start()
 	
 	while True:
-		cloud.wait(999999)
+		cloud_mananger_thread.wait(999999)
