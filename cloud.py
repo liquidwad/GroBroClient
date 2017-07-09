@@ -80,17 +80,21 @@ class CloudManager:
 		
 	# TODO: optimize search
 	def getValue(self, data, channel):
+		print "Attempting to get value for " + channel
 		if data is None:
+			print "Bailing out coz data is None"
 			return None
 			
 		for chan in data:
 			if chan['channel_name'] is channel:
 				state = chan['data']['status']
 				if state is not None:
+					print "Found status: " + state
 					return state
 				else:
+					print "Status not found in channel data"
 					return None
-		
+		print "Could not find channel " + channel + " in list"
 		return None
 		
 	def getData(self, pulled_data, channel):
