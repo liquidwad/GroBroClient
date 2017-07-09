@@ -76,7 +76,7 @@ class GroBroAPI:
 		self.__call_callback('update', args)
 
 		#put recieved channel into cache
-		Cache.update_cache(data)
+		#Cache.update_cache(data)
 
 	def push(self, data):
 		self.socketIO.emit('push', data)
