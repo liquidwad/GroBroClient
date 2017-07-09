@@ -103,7 +103,7 @@ class CloudDevice:
 			'channel_type': self.channel_type, 
 			'channel_subtype': self.channel_subtype, 
 			'available': self.available,
-			'data': { 'status': status })
+			'data': { 'status': status }})
 
 		if(VERBOSE and available):
 			print self.name + " " + self.channel_type + " " + self.channel_subtype + " was initialized"
