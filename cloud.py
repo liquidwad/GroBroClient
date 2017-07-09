@@ -96,13 +96,14 @@ class CloudDevice:
 		self.channel_type = channel_type
 		self.channel_subtype = channel_subtype
 
-	def reportAvailability(self, available):
+	def reportAvailability(self, available, status = None):
 		self.available = available
 		self.cloud.publish({
 			'channel_name': self.name, 
 			'channel_type': self.channel_type, 
 			'channel_subtype': self.channel_subtype, 
-			'available': self.available })
+			'available': self.available,
+			'data': { 'status': status })
 
 		if(VERBOSE and available):
 			print self.name + " " + self.channel_type + " " + self.channel_subtype + " was initialized"

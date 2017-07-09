@@ -7,7 +7,7 @@ class CloudLCD(CloudActuator):
         CloudActuator.__init__(self, name, cloud, "lcd")
         self.lcd = CharLCD(address = addr, port = 1, cols = 16, rows = 2, dotsize = 8, charmap = 'A02')
         self.write(defaultString)
-        self.reportAvailability(True)
+        self.reportAvailability(True, status = defaultString)
 	
     def write(self, string):
         self.clear()
