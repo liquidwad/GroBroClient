@@ -70,7 +70,7 @@ class CloudManagerThread(threading.Thread):
 				initialValue = cloud.getValue(last_data, "relay" + str(i))
 				if initialValue is None:
 					initialValue = False
-				actuators.append(CloudRelay("relay" + str(i), cloud, i, False))
+				actuators.append(CloudRelay("relay" + str(i), cloud, i, initialValue))
 				
 		
 		cloud.reset_pull_data()
