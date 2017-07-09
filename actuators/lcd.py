@@ -4,7 +4,7 @@ from config import *
 
 class CloudLCD(CloudActuator):
     def __init__(self, name, cloud, addr, defaultString = ""):
-        CloudActuator.__init__(self, name, cloud)
+        CloudActuator.__init__(self, name, cloud, "lcd")
         self.lcd = CharLCD(address = addr, port = 1, cols = 16, rows = 2, dotsize = 8, charmap = 'A02')
         self.write(defaultString)
         self.reportAvailability(True)

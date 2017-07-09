@@ -88,22 +88,17 @@ class CloudManager:
 
 
 class CloudDevice:
-	def __init__(self, name, cloud, channel_type = "device", channel_subtype = "undefined"):
+	def __init__(self, name, cloud, channel_type = "undefined"):
 		self.name = name
 		self.cloud = cloud
 		self.channel_type = channel_type
-		self.channel_subtype = channel_subtype
 
 	def reportAvailability(self, available):
 		self.available = available
-		self.cloud.publish({
-			'channel_name': self.name, 
-			'channel_type': self.channel_type, 
-			'channel_subtype': self.channel_subtype, 
-			'available': self.available })
+		self.cloud.publish({'channel_name': self.name, 'channel_type': self.channel_type, 'available': self.available })
 
 		if(VERBOSE and available):
-			print self.name + " " + self.channel_type + " " + self.channel_subtype + " was initialized"
+	def __init__(self, name, cloud, type):
 			
 	def on_update(self, data):
 		if VERBOSE:
@@ -111,8 +106,8 @@ class CloudDevice:
 			print data
 
 class CloudActuator(CloudDevice):
-	def __init__(self, name, cloud, channel_subtype = "undefined"):
-		CloudDevice.__init__(self, name, cloud, "actuator", channel_subtype)
+	def __init__(self, name, cloud, channel_type):
+		CloudDevice.__init__(self, name, cloud, channel_type)
 		self.channel_type = channel_type
 		cloud.subscribe(self, name)
 	
@@ -121,8 +116,8 @@ class CloudActuator(CloudDevice):
 
 
 class CloudSensor(CloudDevice):
-	def __init__(self, name, cloud, measureInterval, channel_subtype = "undefined"):
-		CloudDevice.__init__(self, name, cloud, "sensor", channel_subtype)
+	def __init__(self, name, cloud, measureInterval, c = "undefined"):
+		CloudDevice.__init__(self, name, cloud, "sensor")
 		self.thread = threading.Thread(target = self.measureThread)
 		self.stopped = True
 		self.measureInterval = measureInterval

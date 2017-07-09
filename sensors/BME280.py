@@ -6,8 +6,8 @@ import time
 bme280 = None
 
 class BME280Sensor(CloudSensor):
-    def __init__(self, name, cloud, measureInterval):
-        CloudSensor.__init__(self, name, cloud, measureInterval)
+    def __init__(self, name, cloud, measureInterval, channel_subtype = "BME280"):
+        CloudSensor.__init__(self, name, cloud, measureInterval, channel_subtype)
         
         global bme280
 
@@ -52,7 +52,7 @@ class BME280Sensor(CloudSensor):
 
 class HumiditySensor(BME280Sensor):
     def __init__(self, name, cloud, measureInterval = 5):
-        BME280Sensor.__init__(self,name, cloud, measureInterval)
+        BME280Sensor.__init__(self,name, cloud, measureInterval, "humidity")
 
     def deviceMeasure(self):
         return self.device.read_humidity()
@@ -62,7 +62,7 @@ class HumiditySensor(BME280Sensor):
 
 class TemperatureSensor(BME280Sensor):
     def __init__(self, name, cloud, measureInterval = 5, celcius = False):
-        BME280Sensor.__init__(self, name, cloud, measureInterval)
+        BME280Sensor.__init__(self, name, cloud, measureInterval, "temperature")
         self.celcius = celcius
 
     def deviceMeasure(self):
