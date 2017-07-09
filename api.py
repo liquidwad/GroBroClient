@@ -85,7 +85,7 @@ class GroBroAPI:
 		Cache.update_cache(data)
 
 	def pull(self):
-		self.socketIO.emit('pull', {}, self.__on_pull_response)
+		self.socketIO.emit('pull', self.__on_pull_response)
 
 	def register_device(self, key):
 		self.socketIO.emit('register_device', {'key': key })
