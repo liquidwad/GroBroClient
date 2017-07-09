@@ -26,7 +26,7 @@ class CloudLCD(CloudActuator):
 		    
 class RelayLCD(CloudLCD):
     def __init__(self, name, cloud, addr, data = {}):
-        CloudLCD.__init__(self, name, cloud, self.getDisplayString(data))
+        CloudLCD.__init__(self, name, cloud, addr, self.getDisplayString(data))
         self.reportAvailability(True, data)
         self.data = data
 	
