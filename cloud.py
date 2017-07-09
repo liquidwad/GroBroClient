@@ -36,7 +36,7 @@ class CloudManager:
 
 	def publish(self, data):
 		while self.connected is False:
-			time.sleep(0.1)
+			self.wait(0.1)
 		self.cloud_api.push(data)
 
 	def on_connected(self):
