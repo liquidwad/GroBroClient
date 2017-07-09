@@ -33,7 +33,7 @@ class CloudRelay(CloudActuator):
 		
 		if((data.value is not None) and (data.value is not self.state)):
 			self.state = data.value
-		    self.changeValue(data.value)
+			self.changeValue(data.value)
 		    
 		    
 		
