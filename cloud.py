@@ -57,9 +57,9 @@ class CloudManager:
 		print "Got update:"
 		print data
 		try:
-			subscribers = self.subscribers[data.channel_name]
+			subscribers = self.subscribers[data['channel_name']]
 			for subscriber in subscribers:
-				subscriber.on_update(data)
+				subscriber.on_update(data['data'])
 		except Exception, e:
 			pass
 
