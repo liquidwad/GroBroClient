@@ -100,7 +100,8 @@ class GroBroAPI:
 		self.socketIO.on('update', self.__on_update_response)
 
 	def wait(self, seconds):
-		self.socketIO.wait(seconds=seconds)
+		if self.socketIO:
+			self.socketIO.wait(seconds=seconds)
 
 
 if __name__ == "__main__":
