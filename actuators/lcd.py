@@ -30,7 +30,7 @@ class RelayLCD(CloudLCD):
         self.reportAvailability(True, data)
         self.data = data
 	
-    def getDisplayString(data):
+    def getDisplayString(self,data):
         # We have 16 chars per row times 2 rows
         # Each sub-string is max 7 chars
         w = 7
