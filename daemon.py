@@ -65,7 +65,7 @@ class CloudManagerThread(threading.Thread):
 			actuators.append(RelayLCD("lcd1", cloud, LCD_RIGHT_ADDR, lcd1Data))
 				
 			# Initialize relays
-			for i in range(0,7):
+			for i in range(0,8):
 				# Obtain this relay's initial state from the pulled data
 				initialValue = cloud.getValue(last_data, "relay"+ str(i))
 				if initialValue is None:
