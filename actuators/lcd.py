@@ -26,7 +26,7 @@ class CloudLCD(CloudActuator):
 		    
 class RelayLCD(CloudLCD):
     def __init__(self, name, cloud, addr, data = {}):
-        CloudLCD.__init__(self, name, cloud, getDisplayString(data))
+        CloudLCD.__init__(self, name, cloud, self.getDisplayString(data))
         self.reportAvailability(True, data)
         self.data = data
 	
@@ -43,4 +43,4 @@ class RelayLCD(CloudLCD):
 		
 		if((data is not None) and (data is not self.data)):
 		    self.data = data
-		    self.write(getDisplayString(data))
+		    self.write(self.getDisplayString(data))
