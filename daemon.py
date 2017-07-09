@@ -39,7 +39,7 @@ class CloudManagerThread(threading.Thread):
 
 		# TODO: fix this because it will block forever if pulled data is empty
 		while cloud.data_pulled is False:
-			cloud.wait(0.1)
+			time.sleep(0.1)
 
 		#Now we have the latest data and we initialize actuators
 		last_data = cloud.pulled_data
