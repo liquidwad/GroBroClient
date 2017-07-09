@@ -1,7 +1,7 @@
 from config import *
 from cloud import *
-from BME280 import *
-from relay import *
+from sensors.BME280 import *
+from actuators.relay import *
 import threading
 import time
 import signal
@@ -46,17 +46,26 @@ class CloudManagerThread(threading.Thread):
 		#If this is the first time we ever run, the server will have an empty pull
 		
 		if DEVICE_MODEL is 'WW8':
+			# Initialize left LCD
+			lcd0String = cloud.getValue(last_data, "lcd0")
+			if lcd0String is None:
+				lcd0String = "WALL"
+			actuators.append(CloudLCD("lcd0", cloud, LCD_LEFT_ADDR, lcd0String))
+			
+			# Initialize right LCD
+			lcd1String = cloud.getValue(last_data, "lcd1")
+			if lcd1String is None:
+				lcd1String = "WART"
+			actuators.append(CloudLCD("lcd1", cloud, LCD_RIGHT_ADDR, lcd1String))
+				
+			# Initialize relays
 			for i in range(0,7):
-				# During initialization, each actuator will report to the cloud that it is present
-				if last_data is None:
-					# Default initialValue will be False
-					actuators.append(CloudRelay("relay" + str(i), cloud, i))
-				else:
-					# Obtain this relay's initial state from the pulled data
-					initialValue = cloud.getValue(last_data, "relay"+ str(i))
-					if initialValue is None:
-						initialValue = False
-					actuators.append(CloudRelay("relay" + str(i), cloud, i, initialValue))
+				# Obtain this relay's initial state from the pulled data
+				initialValue = cloud.getValue(last_data, "relay"+ str(i))
+				if initialValue is None:
+					initialValue = False
+				actuators.append(CloudRelay("relay" + str(i), cloud, i, initialValue))
+				
 		
 		cloud.reset_pull_data()
 		

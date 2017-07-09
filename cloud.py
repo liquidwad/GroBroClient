@@ -72,6 +72,9 @@ class CloudManager:
 		self.pulled_data = None
 		
 	def getValue(self, data, channel):
+		if data is None:
+			return None
+			
 		for chan in data:
 			if chan['channel_name'] is channel:
 				state = chan['data'].status
@@ -106,8 +109,6 @@ class CloudActuator(CloudDevice):
 	def changeValue(self, newValue):
 		pass
 
-
-		
 
 class CloudSensor(CloudDevice):
 	def __init__(self, name, cloud, measureInterval):

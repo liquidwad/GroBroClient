@@ -2,7 +2,11 @@ from cloud import *
 from config import *
 import RPi.GPIO as GPIO
 
-relay_gpio = [5,6,4,17,27,22,23,24]
+#Plug order
+# 15 23 25 7
+# 14 18 24 8
+
+relay_gpio = [15,23,25,7,14,18,24,8]
 
 class CloudRelay(CloudActuator):
     def __init__(self, name, cloud, relayNumber, initialState = False):
