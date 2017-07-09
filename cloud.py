@@ -102,7 +102,7 @@ class CloudManager:
 			return None
 		
 		for chan in pulled_data:
-			if chan['channel_name'] is channel:
+			if chan['channel_name'] == channel:
 				data = chan['data']
 				return data
 			
