@@ -113,7 +113,6 @@ class CloudDevice:
 class CloudActuator(CloudDevice):
 	def __init__(self, name, cloud, channel_subtype = "undefined"):
 		CloudDevice.__init__(self, name, cloud, "actuator", channel_subtype)
-		self.channel_type = channel_type
 		cloud.subscribe(self, name)
 	
 	def changeValue(self, newValue):
