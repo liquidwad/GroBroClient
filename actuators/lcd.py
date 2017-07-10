@@ -66,10 +66,10 @@ class RelayLCD(CloudLCD):
 		# We have 16 chars per row times 2 rows
 		# Each sub-string is max 6 chars
 		# The first char of each string holds the on/off status
-		updateLabel(data, 'ul')
-		updateLabel(data, 'ur')
-		updateLabel(data, 'll')
-		updateLabel(data, 'lr')
+		self.updateLabel(data, 'ul')
+		self.updateLabel(data, 'ur')
+		self.updateLabel(data, 'll')
+		self.updateLabel(data, 'lr')
 	
 	def updateLabel(self, data, tag):
 		w = 6
