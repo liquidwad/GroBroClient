@@ -80,8 +80,8 @@ class RelayLCD(CloudLCD):
 		if data['channel_name'] == self.name:
 		    dat = data['data']
     		if((dat is not None) and (dat is not self.data)):
-    		    self.data = dat
-    		    self.write(self.getDisplayString(dat))
+    	        self.data = dat
+    	        self.write(self.getDisplayString(dat))
         elif data['channel_name'] == "relay0":
             self.ul = data['channel_name']['data']['status']
             self.write(self.getDisplayString(self.data))
