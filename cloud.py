@@ -31,10 +31,10 @@ class CloudManager:
 		try:
 			self.subscribers[channel].append(subscriber)
 		except KeyError, e:
-			print "KeyError during " + subscriber.name + " subscribing to channel " + channel
 			self.subscribers[channel] = []
 			self.subscribers[channel].append(subscriber)
-		print subscriber.name + " subscribed to channel " + channel
+		if VERBOSE:
+			print subscriber.name + " subscribed to channel " + channel
 
 	def publish(self, data):
 		while self.connected is False:
@@ -56,8 +56,9 @@ class CloudManager:
 		self.connected = True
 
 	def on_update(self, data):
-		print "Got update:"
-		print data
+		if VERBOSE:
+			print "Got update:"
+			print data
 		try:
 			subscribers = self.subscribers[data['channel_name']]
 			for subscriber in subscribers:
@@ -65,8 +66,19 @@ class CloudManager:
 		except Exception, e:
 			pass
 
+	def getSubscribers(self, channel):
+		string = ""
+		try:
+			subscribers = self.subscribers[channel]
+			for subscriber in subscribers:
+				string = string + subscriber.name + ","
+		except Exception, e:
+			pass
+		
+		return string
+		
 	def on_pull(self, data):
-		if VERBOSE is True:
+		if VERBOSE:
 			print "Pulled: ", data
 		
 		for chan in data:

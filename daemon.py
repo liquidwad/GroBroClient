@@ -72,7 +72,7 @@ class CloudManagerThread(threading.Thread):
 					initialValue = False
 				actuators.append(CloudRelay("relay" + str(i), cloud, i, initialValue))
 				
-		
+		print "relay0 subscribers: " + cloud.getSubscribers("relay0")
 		cloud.reset_pull_data()
 		print "Pulling again..."
 		cloud.pull_updates()
