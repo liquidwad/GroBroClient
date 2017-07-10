@@ -68,7 +68,7 @@ class CloudManagerThread(threading.Thread):
 			actuators.append(RelayLCD("lcd0", cloud, addr = LCD_LEFT_ADDR, relays = ["relay0", "relay1", "relay4", "relay5"], data = lcd0Data))
 			
 			# Initialize right LCD
-			lcd1Data = cloud.getData(last_data, "lcd0")
+			lcd1Data = cloud.getData(last_data, "lcd1")
 			if lcd1Data is None:
 				lcd1Data = { 'ul': "relay2", 'ur': "relay3", 'll':"relay6", 'lr':"relay7" }
 			actuators.append(RelayLCD("lcd1", cloud, addr = LCD_RIGHT_ADDR, relays = ["relay2", "relay3", "relay6", "relay7"], data = lcd1Data))

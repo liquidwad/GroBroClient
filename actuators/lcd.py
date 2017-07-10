@@ -26,18 +26,13 @@ class CloudLCD(CloudActuator):
 			
 class RelayLCD(CloudLCD):
 	def __init__(self, name, cloud, addr, relays, data = {}):
-		self.ul = False
-		self.ur = False
-		self.ll = False
-		self.lr = False
-		CloudLCD.__init__(self, name, cloud, addr, self.getDisplayString(data))
+		CloudLCD.__init__(self, name, cloud, addr)
 		#subscribe to updates from the associated relays
 		cloud.subscribe(self, relays[0])
 		cloud.subscribe(self, relays[1])
 		cloud.subscribe(self, relays[2])
 		cloud.subscribe(self, relays[3])
 		self.reportAvailability(True, data)
-		self.data = data
 		self.offChar = (
 			0b11111, 
 			0b10001, 
@@ -58,20 +53,46 @@ class RelayLCD(CloudLCD):
 			0b00000, 
 			0b00000)
 			
-		self.lcd.create_char(0, self.offChar)
-		self.lcd.create_char(1, self.onChar)
+		self.positions = {}
+		self.positions['ul'] = (0,0)
+		self.positions['ur'] = (0,9)
+		self.positions['ll'] = (1,0)
+		self.positions['lr'] = (1,9)
 	
-	def getDisplayString(self,data):
+		self.updateDisplay(data)
+		self.data = data
+		
+	def updateDisplay(self,data):
 		# We have 16 chars per row times 2 rows
 		# Each sub-string is max 6 chars
 		# The first char of each string holds the on/off status
-
+		updateLabel(data, 'ul')
+		updateLabel(data, 'ur')
+		updateLabel(data, 'll')
+		updateLabel(data, 'lr')
+	
+	def updateLabel(self, data, tag):
 		w = 6
-		return (("\x01" if self.ul else "\x00") + data['ul'][0:w].center(w) + "  " +
-		("\x01" if self.ur else "\x00") + data['ur'][0:w].center(w) + "\n\r" + 
-		("\x01" if self.ll else "\x00") + data['ll'][0:w].center(w) + "  " + 
-		("\x01" if self.lr else "\x00") + data['lr'][0:w].center(w)) 
+		if( data[tag] != self.data[tag]):
+			self.lcd.cursor_pos = self.positions[tag]
+			if( len(data[tag]) < len(self.data[tag]))
+				self.lcd.write_string("      ");
+			self.lcd.write_string(" " + data[tag][0:w].center(w))
+		
 	   
+	def setRelayStatus(self, relay, status):
+		if (relay is 0) or (relay is 2):
+			self.lcd.cursor_pos = (0,0)
+		elif (relay is 1) or (relay is 3):
+			self.lcd.cursor_pos = (0,9)
+		if (relay is 4) or (relay is 6):
+			self.lcd.cursor_pos = (1,0)
+		elif (relay is 5) or (relay is 7):
+			self.lcd.cursor_pos = (1,9)
+		
+		self.lcd.create_char(0, self.onChar if status else self.offChar)
+		self.lcd.write_string('\x00')
+		
 	def on_update(self, data):
 		if VERBOSE:
 			print('%s got update:' % self.name)
@@ -80,29 +101,21 @@ class RelayLCD(CloudLCD):
 		if data['channel_name'] == self.name:
 			dat = data['data']
 			if((dat is not None) and (dat is not self.data)):
+				self.updateDisplay(dat)
 				self.data = dat
-				self.write(self.getDisplayString(dat))
 		elif data['channel_name'] == "relay0":
-			self.ul = data['data']['status']
-			self.write(self.getDisplayString(self.data))
+			self.setRelayStatus(0, data['data']['status'])
 		elif data['channel_name'] == "relay1":
-			self.ur = data['data']['status']
-			self.write(self.getDisplayString(self.data))
+			self.setRelayStatus(1, data['data']['status'])
 		elif data['channel_name'] == "relay2":
-			self.ul = data['data']['status']
-			self.write(self.getDisplayString(self.data))
+			self.setRelayStatus(2, data['data']['status'])
 		elif data['channel_name'] == "relay3":
-			self.ur = data['data']['status']
-			self.write(self.getDisplayString(self.data))
+			self.setRelayStatus(3, data['data']['status'])
 		elif data['channel_name'] == "relay4":
-			self.ll = data['data']['status']
-			self.write(self.getDisplayString(self.data))
+			self.setRelayStatus(4, data['data']['status'])
 		elif data['channel_name'] == "relay5":
-			self.lr = data['data']['status']
-			self.write(self.getDisplayString(self.data))
+			self.setRelayStatus(5, data['data']['status'])
 		elif data['channel_name'] == "relay6":
-			self.ll = data['data']['status']
-			self.write(self.getDisplayString(self.data))
+			self.setRelayStatus(6, data['data']['status'])
 		elif data['channel_name'] == "relay7":
-			self.lr = data['data']['status']
-			self.write(self.getDisplayString(self.data))
+			self.setRelayStatus(7, data['data']['status'])
