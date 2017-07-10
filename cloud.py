@@ -59,7 +59,7 @@ class CloudManager:
 		try:
 			subscribers = self.subscribers[data['channel_name']]
 			for subscriber in subscribers:
-				subscriber.on_update(data['data'])
+				subscriber.on_update(data)
 		except Exception, e:
 			pass
 
