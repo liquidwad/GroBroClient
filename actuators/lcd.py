@@ -83,26 +83,26 @@ class RelayLCD(CloudLCD):
 				self.data = dat
 				self.write(self.getDisplayString(dat))
 		elif data['channel_name'] == "relay0":
-			self.ul = data['channel_name']['data']['status']
+			self.ul = data['data']['status']
 			self.write(self.getDisplayString(self.data))
 		elif data['channel_name'] == "relay1":
-			self.ur = data['channel_name']['data']['status']
+			self.ur = data['data']['status']
 			self.write(self.getDisplayString(self.data))
 		elif data['channel_name'] == "relay2":
-			self.ul = data['channel_name']['data']['status']
+			self.ul = data['data']['status']
 			self.write(self.getDisplayString(self.data))
 		elif data['channel_name'] == "relay3":
-			self.ur = data['channel_name']['data']['status']
+			self.ur = data['data']['status']
 			self.write(self.getDisplayString(self.data))
 		elif data['channel_name'] == "relay4":
-			self.ll = data['channel_name']['data']['status']
+			self.ll = data['data']['status']
 			self.write(self.getDisplayString(self.data))
 		elif data['channel_name'] == "relay5":
-			self.lr = data['channel_name']['data']['status']
+			self.lr = data['data']['status']
 			self.write(self.getDisplayString(self.data))
 		elif data['channel_name'] == "relay6":
-			self.ll = data['channel_name']['data']['status']
+			self.ll = data['data']['status']
 			self.write(self.getDisplayString(self.data))
 		elif data['channel_name'] == "relay7":
-			self.lr = data['channel_name']['data']['status']
+			self.lr = data['data']['status']
 			self.write(self.getDisplayString(self.data))
