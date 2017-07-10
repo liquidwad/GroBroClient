@@ -33,6 +33,7 @@ class CloudManager:
 		except KeyError, e:
 			self.subscribers[channel] = []
 			self.subscribers[channel].append(subscriber)
+		print subscriber.name + " subscribed to channel " + channel
 
 	def publish(self, data):
 		while self.connected is False:
