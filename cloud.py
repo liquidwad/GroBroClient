@@ -38,7 +38,10 @@ class CloudManager:
 
 	def publish(self, data):
 		#First notify all subscribers of this change, since server does not reflect published values back to us
-		self.on_update(data)
+		if hasattr(data, 'data'):
+			self.on_update(data)
+		else:
+			self.on_update(Cache.get_cache[data['channel_name']])
 		# If cloud is available, push the data to it
 		while self.connected is False:
 			self.wait(0.1)
