@@ -75,7 +75,7 @@ class RelayLCD(CloudLCD):
 		w = 6
 		if( data[tag] != self.data[tag]):
 			self.lcd.cursor_pos = self.positions[tag]
-			if( len(data[tag]) < len(self.data[tag]))
+			if( len(data[tag]) < len(self.data[tag])):
 				self.lcd.write_string("      ");
 			self.lcd.write_string(" " + data[tag][0:w].center(w))
 		
