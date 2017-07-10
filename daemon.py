@@ -52,6 +52,15 @@ class CloudManagerThread(threading.Thread):
 		#If this is the first time we ever run, the server will have an empty pull
 		
 		if DEVICE_MODEL is 'WW8':
+			
+			# Initialize relays
+			for i in range(0,8):
+				# Obtain this relay's initial state from the pulled data
+				initialValue = cloud.getValue(last_data, "relay" + str(i))
+				if initialValue is None:
+					initialValue = False
+				actuators.append(CloudRelay("relay" + str(i), cloud, i, initialValue))
+				
 			# Initialize left LCD
 			lcd0Data = cloud.getData(last_data, "lcd0")
 			if lcd0Data is None:
@@ -64,13 +73,6 @@ class CloudManagerThread(threading.Thread):
 				lcd1Data = { 'ul': "relay2", 'ur': "relay3", 'll':"relay6", 'lr':"relay7" }
 			actuators.append(RelayLCD("lcd1", cloud, addr = LCD_RIGHT_ADDR, relays = ["relay2", "relay3", "relay6", "relay7"], data = lcd1Data))
 				
-			# Initialize relays
-			for i in range(0,8):
-				# Obtain this relay's initial state from the pulled data
-				initialValue = cloud.getValue(last_data, "relay" + str(i))
-				if initialValue is None:
-					initialValue = False
-				actuators.append(CloudRelay("relay" + str(i), cloud, i, initialValue))
 				
 		print "relay0 subscribers: " + cloud.getSubscribers("relay0")
 		cloud.reset_pull_data()
