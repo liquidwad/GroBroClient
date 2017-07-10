@@ -131,31 +131,28 @@ class CloudDevice:
 		self.channel_type = channel_type
 		self.channel_subtype = channel_subtype
 		
-	def reportAvailability(self, available):
+	def reportAvailability(self, available, data = None):
 		self.available = available
-		self.cloud.publish({
-			'channel_name': self.name, 
-			'channel_type': self.channel_type, 
-			'channel_subtype': self.channel_subtype, 
-			'available': self.available
-		})
-
-		if(VERBOSE and available):
-			print self.name + " " + self.channel_type + " " + self.channel_subtype + " was initialized"
-	
-	def reportAvailability(self, available, data):
-		self.available = available
-		self.cloud.publish({
+		if data is None:
+			self.cloud.publish({
+				'channel_name': self.name, 
+				'channel_type': self.channel_type, 
+				'channel_subtype': self.channel_subtype, 
+				'available': self.available
+			})
+		else:
+			self.cloud.publish({
 			'channel_name': self.name, 
 			'channel_type': self.channel_type, 
 			'channel_subtype': self.channel_subtype, 
 			'available': self.available,
 			'data': data
 		})
+			
 
 		if(VERBOSE and available):
-			print self.name + " " + self.channel_type + " " + self.channel_subtype + " was initialized for the first time"
-			
+			print self.name + " " + self.channel_type + " " + self.channel_subtype + " was initialized"
+	
 	def on_update(self, data):
 		if VERBOSE:
 			print('%s got update:' % self.name)
