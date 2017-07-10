@@ -59,6 +59,7 @@ class RelayLCD(CloudLCD):
 		self.positions['ll'] = (1,0)
 		self.positions['lr'] = (1,9)
 	
+		self.data = {}
 		self.updateDisplay(data)
 		self.data = data
 		
