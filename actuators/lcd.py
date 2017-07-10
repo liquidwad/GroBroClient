@@ -26,16 +26,16 @@ class CloudLCD(CloudActuator):
 			
 class RelayLCD(CloudLCD):
 	def __init__(self, name, cloud, addr, relays, data = {}):
+		self.ul = False
+		self.ur = False
+		self.ll = False
+		self.lr = False
 		CloudLCD.__init__(self, name, cloud, addr, self.getDisplayString(data))
 		#subscribe to updates from the associated relays
 		cloud.subscribe(self, relays[0])
 		cloud.subscribe(self, relays[1])
 		cloud.subscribe(self, relays[2])
 		cloud.subscribe(self, relays[3])
-		self.ul = False
-		self.ur = False
-		self.ll = False
-		self.lr = False
 		self.reportAvailability(True, data)
 		self.data = data
 		self.offChar = (
