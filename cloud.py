@@ -37,6 +37,9 @@ class CloudManager:
 			print subscriber.name + " subscribed to channel " + channel
 
 	def publish(self, data):
+		#First notify all subscribers of this change, since server does not reflect published values back to us
+		self.on_update(data)
+		# If cloud is available, push the data to it
 		while self.connected is False:
 			self.wait(0.1)
 		self.cloud_api.push(data)
@@ -127,18 +130,31 @@ class CloudDevice:
 		self.cloud = cloud
 		self.channel_type = channel_type
 		self.channel_subtype = channel_subtype
+		
+	def reportAvailability(self, available):
+		self.available = available
+		self.cloud.publish({
+			'channel_name': self.name, 
+			'channel_type': self.channel_type, 
+			'channel_subtype': self.channel_subtype, 
+			'available': self.available
+		})
 
-	def reportAvailability(self, available, data = None):
+		if(VERBOSE and available):
+			print self.name + " " + self.channel_type + " " + self.channel_subtype + " was initialized"
+	
+	def reportAvailability(self, available, data):
 		self.available = available
 		self.cloud.publish({
 			'channel_name': self.name, 
 			'channel_type': self.channel_type, 
 			'channel_subtype': self.channel_subtype, 
 			'available': self.available,
-			'data': data})
+			'data': data
+		})
 
 		if(VERBOSE and available):
-			print self.name + " " + self.channel_type + " " + self.channel_subtype + " was initialized"
+			print self.name + " " + self.channel_type + " " + self.channel_subtype + " was initialized for the first time"
 			
 	def on_update(self, data):
 		if VERBOSE:

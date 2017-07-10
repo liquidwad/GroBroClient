@@ -25,14 +25,20 @@ class CloudLCD(CloudActuator):
 			self.write(data.value)
 			
 class RelayLCD(CloudLCD):
-	def __init__(self, name, cloud, addr, relays, data = {}):
+	def __init__(self, name, cloud, addr, relays, pulled_data = {}):
 		CloudLCD.__init__(self, name, cloud, addr)
 		#subscribe to updates from the associated relays
 		cloud.subscribe(self, relays[0])
 		cloud.subscribe(self, relays[1])
 		cloud.subscribe(self, relays[2])
 		cloud.subscribe(self, relays[3])
-		self.reportAvailability(True, data)
+		data = cloud.getData(pulled_data, self.name)
+		if data is None:
+			data = {'ul': relays[0], 'ur':relays[1], 'll':relays[2], 'lr':relays[3]}
+			self.reportAvailability(True, data)
+		else:
+			self.reportAvailability(True)
+			
 		self.offChar = (
 			0b11111, 
 			0b10001, 
@@ -78,6 +84,7 @@ class RelayLCD(CloudLCD):
 			self.lcd.cursor_pos = self.positions[tag]
 			if( len(data[tag]) < len(self.data[tag])):
 				self.lcd.write_string("      ");
+				self.lcd.cursor_pos = self.positions[tag]
 			self.lcd.write_string(" " + data[tag][0:w].center(w))
 		
 	   
@@ -91,8 +98,9 @@ class RelayLCD(CloudLCD):
 		elif (relay is 5) or (relay is 7):
 			self.lcd.cursor_pos = (1,9)
 		
-		self.lcd.create_char(0, self.onChar if status else self.offChar)
-		self.lcd.write_string('\x00')
+		self.lcd.write_string('|' if status else '_')
+		#self.lcd.create_char(0, self.onChar if status else self.offChar)
+		#self.lcd.write_string('\x00')
 		
 	def on_update(self, data):
 		if VERBOSE:
@@ -120,3 +128,11 @@ class RelayLCD(CloudLCD):
 			self.setRelayStatus(6, data['data']['status'])
 		elif data['channel_name'] == "relay7":
 			self.setRelayStatus(7, data['data']['status'])
+
+class LeftRelayLCD(RelayLCD):
+	def __init__(self, name, cloud, data = {}):
+		RelayLCD.__init__(self, name, cloud, addr = LCD_LEFT_ADDR, relays = ["relay0", "relay1", "relay4", "relay5"], data = data)
+		
+class RightRelayLCD(RelayLCD):
+	def __init__(self, name, cloud, data = {}):
+		RelayLCD.__init__(self, name, cloud, addr = LCD_RIGHT_ADDR, relays = ["relay2", "relay3", "relay6", "relay7"], data = data)

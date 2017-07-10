@@ -9,15 +9,22 @@ import RPi.GPIO as GPIO
 relay_gpio = [15,23,25,7,14,18,24,8]
 
 class CloudRelay(CloudActuator):
-    def __init__(self, name, cloud, relayNumber, initialState = False):
+    def __init__(self, name, cloud, relayNumber, pulled_data = {}):
 		CloudActuator.__init__(self, name, cloud, "relay")
 		global relay_gpio
 		self.relayNumber = relayNumber
 		GPIO.setwarnings(False)
 		GPIO.setmode(GPIO.BCM) # Broadcom pin-numbering scheme
 		GPIO.setup(relay_gpio[relayNumber], GPIO.OUT)
-		self.state = initialState
-		self.reportAvailability(True, data =  { 'status': self.state} )
+		
+		initialValue = cloud.getValue(pulled_data, self.name)
+		if initialValue is None:
+			initialValue = False
+			self.reportAvailability(True, {'status':initialValue})
+		else:
+			self.reportAvailability(True)
+		
+		self.state = initialValue
 		self.changeValue(initialState)
 		   
     def changeValue(self, newValue):
