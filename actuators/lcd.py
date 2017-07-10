@@ -19,9 +19,9 @@ class CloudLCD(CloudActuator):
 		if VERBOSE:
 			print('%s got update:' % self.name)
 			print data
-		
+			
 		if((data.value is not None) and (data.value is not self.state)):
-		    self.state = data.value
+	        self.state = data.value
 		    self.write(data.value)
 		    
 class RelayLCD(CloudLCD):
