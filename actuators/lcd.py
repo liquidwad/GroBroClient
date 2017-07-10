@@ -49,14 +49,14 @@ class RelayLCD(CloudLCD):
 			0b11111)
 		
 		self.onChar = (
-			0b11111, 
-			0b11111, 
-			0b11111, 
-			0b11111, 
-			0b11111, 
-			0b11111, 
-			0b11111, 
-			0b11111)
+			0b00000, 
+			0b00000, 
+			0b00000, 
+			0b00000, 
+			0b00000, 
+			0b00000, 
+			0b00000, 
+			0b00000)
 			
 		self.lcd.create_char(0, self.offChar)
 		self.lcd.create_char(1, self.onChar)
