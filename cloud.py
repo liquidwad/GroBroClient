@@ -64,6 +64,8 @@ class CloudManager:
 			for subscriber in subscribers:
 				subscriber.on_update(data)
 		except Exception, e:
+			if VERBOSE:
+				print "on_update exception: ", e
 			pass
 
 	def getSubscribers(self, channel):
