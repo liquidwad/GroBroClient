@@ -25,7 +25,7 @@ class CloudRelay(CloudActuator):
 			self.reportAvailability(True)
 		
 		self.state = initialValue
-		self.changeValue(initialState)
+		self.changeValue(initialValue)
 		   
     def changeValue(self, newValue):
         self.gpioState = GPIO.LOW if newValue else GPIO.HIGH
