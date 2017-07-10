@@ -74,6 +74,8 @@ class CloudManagerThread(threading.Thread):
 				
 		
 		cloud.reset_pull_data()
+		print "Pulling again..."
+		cloud.pull_updates()
 		
 		print "Initializing sensors..."
 		# During initialization, each sensor object will report to the cloud whether or not it is available 

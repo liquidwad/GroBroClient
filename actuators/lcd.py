@@ -67,10 +67,10 @@ class RelayLCD(CloudLCD):
 		# The first char of each string holds the on/off status
 
 		w = 6
-		return ("\x01" if self.ul else "\x00" + data['ul'][0:w].center(w) + "  " +
-		"\x01" if self.ur else "\x00" + data['ur'][0:w].center(w) + "\n\r" + 
-		"\x01" if self.ll else "\x00" + data['ll'][0:w].center(w) + "  " + 
-		"\x01" if self.lr else "\x00" + data['lr'][0:w].center(w)) 
+		return (("\x01" if self.ul else "\x00") + data['ul'][0:w].center(w) + "  " +
+		("\x01" if self.ur else "\x00") + data['ur'][0:w].center(w) + "\n\r" + 
+		("\x01" if self.ll else "\x00") + data['ll'][0:w].center(w) + "  " + 
+		("\x01" if self.lr else "\x00") + data['lr'][0:w].center(w)) 
 	   
 	def on_update(self, data):
 		if VERBOSE:
