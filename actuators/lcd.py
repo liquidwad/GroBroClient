@@ -60,10 +60,10 @@ class RelayLCD(CloudLCD):
 			0b00000)
 			
 		self.positions = {}
-		self.positions['ul'] = (0,0)
-		self.positions['ur'] = (0,9)
-		self.positions['ll'] = (1,0)
-		self.positions['lr'] = (1,9)
+		self.positions['ul'] = (0,1)
+		self.positions['ur'] = (0,10)
+		self.positions['ll'] = (1,1)
+		self.positions['lr'] = (1,10)
 	
 		self.data = {'ul':'', 'ur':'', 'll':'', 'lr':''}
 		self.updateDisplay(data)
@@ -85,7 +85,7 @@ class RelayLCD(CloudLCD):
 			if( len(data[tag]) < len(self.data[tag])):
 				self.lcd.write_string("      ");
 				self.lcd.cursor_pos = self.positions[tag]
-			self.lcd.write_string(" " + data[tag][0:w].center(w))
+			self.lcd.write_string(data[tag][0:w].center(w))
 		
 	   
 	def setRelayStatus(self, relay, status):
