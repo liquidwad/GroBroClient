@@ -41,7 +41,7 @@ class CloudManager:
 		if hasattr(data, 'data'):
 			self.on_update(data)
 		else:
-			self.on_update(Cache.get_cache[data['channel_name']])
+			self.on_update(Cache.get_cache()[data['channel_name']])
 		# If cloud is available, push the data to it
 		while self.connected is False:
 			self.wait(0.1)
