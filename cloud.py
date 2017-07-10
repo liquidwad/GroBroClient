@@ -31,6 +31,7 @@ class CloudManager:
 		try:
 			self.subscribers[channel].append(subscriber)
 		except KeyError, e:
+			print "KeyError during " + subscriber.name + " subscribing to channel " + channel
 			self.subscribers[channel] = []
 			self.subscribers[channel].append(subscriber)
 		print subscriber.name + " subscribed to channel " + channel
