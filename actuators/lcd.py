@@ -131,8 +131,8 @@ class RelayLCD(CloudLCD):
 
 class LeftRelayLCD(RelayLCD):
 	def __init__(self, name, cloud, data = {}):
-		RelayLCD.__init__(self, name, cloud, addr = LCD_LEFT_ADDR, relays = ["relay0", "relay1", "relay4", "relay5"], data = data)
+		RelayLCD.__init__(self, name, cloud, addr = LCD_LEFT_ADDR, relays = ["relay0", "relay1", "relay4", "relay5"], pulled_data = data)
 		
 class RightRelayLCD(RelayLCD):
 	def __init__(self, name, cloud, data = {}):
-		RelayLCD.__init__(self, name, cloud, addr = LCD_RIGHT_ADDR, relays = ["relay2", "relay3", "relay6", "relay7"], data = data)
+		RelayLCD.__init__(self, name, cloud, addr = LCD_RIGHT_ADDR, relays = ["relay2", "relay3", "relay6", "relay7"], pulled_data = data)
