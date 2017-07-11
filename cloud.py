@@ -53,11 +53,11 @@ class CloudManager:
 			dat = Cache.get_cache()[data['channel_name']]
 		
 		subscribers = {}
-		if hasattr(self.subscribers, data['channel_name']):
-			subscribers = self.subscribers[data['channel_name']]
+		if hasattr(self.subscribers, dat['channel_name']):
+			subscribers = self.subscribers[dat['channel_name']]
 		for subscriber in subscribers:
 			if((publisher is None) or (subscriber is not publisher)):
-				subscriber.on_update(data)
+				subscriber.on_update(dat)
 
 	def on_connected(self):
 		print "Connected"
@@ -77,6 +77,7 @@ class CloudManager:
 		if VERBOSE:
 			print "Got update:"
 			print data
+			
 		self.notifySubscribers(data)
 
 	def getSubscribers(self, channel):
