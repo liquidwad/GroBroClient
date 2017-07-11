@@ -49,11 +49,11 @@ class CloudManager:
 		
 	def notifySubscribers(self, data, publisher = None):
 		dat = data
-		if not hasattr(data, 'data'):
+		if not 'data' in data:
 			dat = Cache.get_cache()[data['channel_name']]
 		
 		subscribers = {}
-		if hasattr(self.subscribers, dat['channel_name']):
+		if dat['channel_name'] in self.subscribers:
 			subscribers = self.subscribers[dat['channel_name']]
 		for subscriber in subscribers:
 			if((publisher is None) or (subscriber is not publisher)):
