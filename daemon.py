@@ -90,4 +90,4 @@ if __name__ == "__main__":
 	cloud_mananger_thread.start()
 	
 	while True:
-		pass
+		time.sleep(0.1)
