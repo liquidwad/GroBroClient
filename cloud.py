@@ -2,6 +2,7 @@ from api import *
 from config import *
 import threading
 import time
+import Adafruit_GPIO.I2C as I2C
 
 class CloudManager:
 	def __init__(self, host, key):
@@ -193,7 +194,7 @@ class CloudSensor(CloudDevice):
 		pass
 	
 	def checkAndReportDevice(self):
-		device = i2c.get_i2c_device(self.address)
+		device = I2C.get_i2c_device(self.address)
 		if (device is None) and (self.device is not None):
 			self.device = None
 			self.reportAvailability(False)
