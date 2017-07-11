@@ -7,7 +7,6 @@ import RPi.GPIO as GPIO
 # 15 23 25 7
 
 relay_gpio = [14,18,24,8,15,23,25,7]
-#relay_gpio = [15,23,25,7,14,18,24,8]
 
 class CloudRelay(CloudActuator):
     def __init__(self, name, cloud, relayNumber, pulled_data = {}):
@@ -30,7 +29,7 @@ class CloudRelay(CloudActuator):
 		   
     def changeValue(self, newValue):
         self.gpioState = GPIO.LOW if newValue else GPIO.HIGH
-        GPIO.output(relay_gpio[self.relayNumber], self.state) 
+        GPIO.output(relay_gpio[self.relayNumber], self.gpioState) 
         if(VERBOSE):
             print('%s was turned %s' % (self.name, 'on' if newValue else 'off'))
     
