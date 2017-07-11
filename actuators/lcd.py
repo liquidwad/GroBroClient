@@ -1,6 +1,8 @@
 from RPLCD.i2c import CharLCD
 from cloud import *
 from config import *
+import threading
+import Queue
 
 class CloudLCD(CloudActuator):
 	def __init__(self, name, cloud, addr, defaultString = ""):
@@ -65,6 +67,9 @@ class RelayLCD(CloudLCD):
 		self.positions['ll'] = (1,1)
 		self.positions['lr'] = (1,10)
 	
+		self.q = Queue()
+		self.t = threading.Thread(target = self.workerThread)
+		self.t.start()
 		self.data = {'ul':'', 'ur':'', 'll':'', 'lr':''}
 		self.updateDisplay(data)
 		self.data = data
@@ -73,20 +78,18 @@ class RelayLCD(CloudLCD):
 		# We have 16 chars per row times 2 rows
 		# Each sub-string is max 6 chars
 		# The first char of each string holds the on/off status
-		self.updateLabel(data, 'ul')
-		self.updateLabel(data, 'ur')
-		self.updateLabel(data, 'll')
-		self.updateLabel(data, 'lr')
+		tags = [ 'ul', 'ur', 'll', 'lr']
+		for tag in tags:
+			if( data[tag] != self.data[tag]):
+				self.q.put({'method':"updateLabel", 'tag':tag})
 	
 	def updateLabel(self, data, tag):
 		w = 6
-		if( data[tag] != self.data[tag]):
+		self.lcd.cursor_pos = self.positions[tag]
+		if( len(data[tag]) < len(self.data[tag])):
+			self.lcd.write_string("      ");
 			self.lcd.cursor_pos = self.positions[tag]
-			if( len(data[tag]) < len(self.data[tag])):
-				self.lcd.write_string("      ");
-				self.lcd.cursor_pos = self.positions[tag]
-			self.lcd.write_string(data[tag][0:w].center(w))
-		
+		self.lcd.write_string(data[tag][0:w].center(w))
 	   
 	def setRelayStatus(self, relay, status):
 		if (relay is 0) or (relay is 2):
@@ -101,6 +104,15 @@ class RelayLCD(CloudLCD):
 		self.lcd.write_string('|' if status else '_')
 		#self.lcd.create_char(0, self.onChar if status else self.offChar)
 		#self.lcd.write_string('\x00')
+	
+	def workerThread(self):
+		while True:
+			item = self.q.get()
+			if(item['method'] == "updateLabel"):
+				self.updateLabel(item['data'], item['tag'])
+			elif(item['method'] == "setRelayStatus"):
+				self.setRelayStatus(item['relay'], item['status'])
+			self.q.task_done()
 		
 	def on_update(self, data):
 		if VERBOSE:
@@ -113,21 +125,21 @@ class RelayLCD(CloudLCD):
 				self.updateDisplay(dat)
 				self.data = dat
 		elif data['channel_name'] == "relay0":
-			self.setRelayStatus(0, data['data']['status'])
+			self.q.put({'method':"setRelayStatus", 'relay': 0, 'status': data['data']['status']})
 		elif data['channel_name'] == "relay1":
-			self.setRelayStatus(1, data['data']['status'])
+			self.q.put({'method':"setRelayStatus", 'relay': 1, 'status': data['data']['status']})
 		elif data['channel_name'] == "relay2":
-			self.setRelayStatus(2, data['data']['status'])
+			self.q.put({'method':"setRelayStatus", 'relay': 2, 'status': data['data']['status']})
 		elif data['channel_name'] == "relay3":
-			self.setRelayStatus(3, data['data']['status'])
+			self.q.put({'method':"setRelayStatus", 'relay': 3, 'status': data['data']['status']})
 		elif data['channel_name'] == "relay4":
-			self.setRelayStatus(4, data['data']['status'])
+			self.q.put({'method':"setRelayStatus", 'relay': 4, 'status': data['data']['status']})
 		elif data['channel_name'] == "relay5":
-			self.setRelayStatus(5, data['data']['status'])
+			self.q.put({'method':"setRelayStatus", 'relay': 5, 'status': data['data']['status']})
 		elif data['channel_name'] == "relay6":
-			self.setRelayStatus(6, data['data']['status'])
+			self.q.put({'method':"setRelayStatus", 'relay': 6, 'status': data['data']['status']})
 		elif data['channel_name'] == "relay7":
-			self.setRelayStatus(7, data['data']['status'])
+			self.q.put({'method':"setRelayStatus", 'relay': 7, 'status': data['data']['status']})
 
 class LeftRelayLCD(RelayLCD):
 	def __init__(self, name, cloud, data = {}):
