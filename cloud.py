@@ -45,7 +45,7 @@ class CloudManager:
 			self.wait(0.1)
 		self.cloud_api.push(data)
 		
-	def notifySubscribers(self, publisher, data):
+	def notifySubscribers(self, data, publisher):
 		dat = data
 		if not hasattr(data, 'data'):
 			dat = Cache.get_cache()[data['channel_name']]
