@@ -69,6 +69,7 @@ class RelayLCD(CloudLCD):
 	
 		self.q = Queue.Queue()
 		self.t = threading.Thread(target = self.workerThread)
+		selt.t.daemon = True
 		self.t.start()
 		self.data = {'ul':'', 'ur':'', 'll':'', 'lr':''}
 		self.updateDisplay(data)
