@@ -38,25 +38,24 @@ class CloudManager:
 
 	def publish(self, data, publisher = None):
 		#First notify all subscribers of this change, since server does not reflect published values back to us
-		if( publisher is not None):
-			self.notifySubscribers(data, publisher)
+		self.notifySubscribers(data, publisher)
+		
 		# If cloud is available, push the data to it
 		while self.connected is False:
 			self.wait(0.1)
 		self.cloud_api.push(data)
 		
-	def notifySubscribers(self, data, publisher):
+	def notifySubscribers(self, data, publisher = None):
 		dat = data
 		if not hasattr(data, 'data'):
 			dat = Cache.get_cache()[data['channel_name']]
-		try:
+		
+		subscribers = {}
+		if hasattr(self.subscribers, data['channel_name']):
 			subscribers = self.subscribers[data['channel_name']]
-			for subscriber in subscribers:
-				if(subscriber is not publisher):
-					subscriber.on_update(data)
-		except Exception, e:
-			if VERBOSE:
-				print "on_update exception: ", e
+		for subscriber in subscribers:
+			if((publisher is None) or (subscriber is not publisher)):
+				subscriber.on_update(data)
 
 	def on_connected(self):
 		print "Connected"
@@ -76,14 +75,7 @@ class CloudManager:
 		if VERBOSE:
 			print "Got update:"
 			print data
-		try:
-			subscribers = self.subscribers[data['channel_name']]
-			for subscriber in subscribers:
-				subscriber.on_update(data)
-		except Exception, e:
-			if VERBOSE:
-				print "on_update exception: ", e
-			pass
+		self.notifySubscribers(data)
 
 	def getSubscribers(self, channel):
 		string = ""
