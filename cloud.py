@@ -2,7 +2,9 @@ from api import *
 from config import *
 import threading
 import time
-import Adafruit_GPIO.I2C as I2C
+import smbus
+
+bus = smbus.SMBus(1)
 
 class CloudManager:
 	def __init__(self, host, key):
@@ -195,10 +197,11 @@ class CloudSensor(CloudDevice):
 	
 	def checkAndReportDevice(self):
 		detected = False
+		global bus
 		try:
-			I2C.get_i2c_device(self.address)
+			bus.read_byte(self.address)
 			detected = True
-		except IOError:
+		except:
 			detected = False
 
 		if (detected is False) and (self.device is not None):
