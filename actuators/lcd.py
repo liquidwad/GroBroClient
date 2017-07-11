@@ -81,7 +81,7 @@ class RelayLCD(CloudLCD):
 		tags = [ 'ul', 'ur', 'll', 'lr']
 		for tag in tags:
 			if( data[tag] != self.data[tag]):
-				self.q.put({'method':"updateLabel", 'tag':tag})
+				self.q.put({'method':"updateLabel", 'data':data, 'tag':tag})
 	
 	def updateLabel(self, data, tag):
 		w = 6
