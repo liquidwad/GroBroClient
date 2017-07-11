@@ -39,7 +39,7 @@ class CloudManagerThread(threading.Thread):
 
 		# TODO: Initialize all actuators here and add them as cloud subscribers before starting the cloud connection
 		print "Pulling..."
-		cloud.pull_updates()
+		cloud.pull_updates(False)
 
 		# TODO: fix this because it will block forever if pulled data is empty
 		while cloud.data_pulled is False:

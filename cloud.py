@@ -16,6 +16,7 @@ class CloudManager:
 		self.subscribers = {}
 		self.pulled_data = None
 		self.data_pulled = False
+		self.notifyOnPull = True
 
 	def wait(self, sec):
 		self.cloud_api.wait(sec)
@@ -24,7 +25,8 @@ class CloudManager:
 		print "Connecting"
 		self.cloud_api.connect()
 
-	def pull_updates(self):
+	def pull_updates(self, notify = True):
+		self.notifyOnPull = notify
 		self.cloud_api.pull()
 
 	def subscribe(self, subscriber, channel):
@@ -91,9 +93,10 @@ class CloudManager:
 	def on_pull(self, data):
 		if VERBOSE:
 			print "Pulled: ", data
-		
-		for chan in data:
-			self.on_update(chan)
+			
+		if(self.notifyOnPull):
+			for chan in data:
+				self.on_update(chan)
 			
 		self.pulled_data = data
 		self.data_pulled = True
