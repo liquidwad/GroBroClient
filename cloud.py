@@ -184,19 +184,34 @@ class CloudSensor(CloudDevice):
 		self.stopped = True
 		self.measureInterval = measureInterval
 		self.device = None
-		self.available = False
+		self.checkAndReportDevice()
 
+	def checkAndReportDevice(self):
+		pass
+	
+	def initDevice(self):
+		pass
+	
+	def checkAndReportDevice(self):
+        device = i2c.get_i2c_device(self.address)
+        if (device is None) and (self.device is not None):
+            self.device = None
+            self.reportAvailability(False)
+        elif (device is not None) and (self.device is None):
+            self.initDevice()
+            
 	def measureThread(self):
 		while self.stopped is False:
 			startTime = time.time()
-			value = self.measure()
-			if value is not None:
-				self.cloud.publish( {'channel_name': self.name, 'data': { 'status': value } } )
-				if(VERBOSE):
-					print('%s: %d' % (self.name, value))
-			elif(VERBOSE):
-				print self.name + "sensor measurement returned none"
-				
+			self.checkAndReportDevice()
+			if(self.device is not None):
+				value = self.measure()
+				if value is not None:
+					self.cloud.publish( {'channel_name': self.name, 'data': { 'status': value } } )
+					if(VERBOSE):
+						print('%s: %d' % (self.name, value))
+				elif(VERBOSE):
+					print self.name + "sensor measurement returned none"
 					
 			deltaTime = time.time() - startTime
 			remainingTime = self.measureInterval - deltaTime
@@ -207,11 +222,12 @@ class CloudSensor(CloudDevice):
 		return none
 
 	def start(self):
-		if self.device is not None:
-			self.stopped = False
-			self.thread.start()
-		else:
-			print "Cannot start " + self.name + " sensor thread: No device detected"
+		self.stopped = False
+		self.thread.start()
+		if VERBOSE:
+			print "Started measurement thread for " + self.name
 
 	def stop(self):
 		self.stopped = True
+		if VERBOSE:
+			print "Stopped measurement thread for " + self.name

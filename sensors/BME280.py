@@ -7,21 +7,22 @@ bme280 = None
 
 class BME280Sensor(CloudSensor):
     def __init__(self, name, cloud, measureInterval, channel_subtype = "BME280"):
+        self.address = 0x77
         CloudSensor.__init__(self, name, cloud, measureInterval, channel_subtype)
-        
-        global bme280
 
-        if(bme280 == None):
+    def initDevice(self):
+        global bme280
+        if(bme280 is None):
             try:
                 bme280 = BME280(mode=BME280_OSAMPLE_8)
+                if VERBOSE:
+                    print self.name + " sensor Detected!"
             except Exception, e:
                 bme280 = None
-                if(VERBOSE):
-                    print "Failed to initialize BME280:"
-                    print e
+        
         self.device = bme280
-        self.reportAvailability(self.device is not None)
-
+        self.reportAvailability(bme280 is not None)
+        
     def measure(self, timeout = BME280_TIMEOUT):
         if(self.device is None):
             return None
