@@ -194,13 +194,19 @@ class CloudSensor(CloudDevice):
 		pass
 	
 	def checkAndReportDevice(self):
-		device = I2C.get_i2c_device(self.address)
-		if (device is None) and (self.device is not None):
+		detected = False
+		try:
+            I2C.get_i2c_device(self.address)
+            detected = True
+        except IOError:
+            detected = False
+            
+		if (detected is False) and (self.device is not None):
 			if VERBOSE:
 				print self.name + " sensor device disconnected"
 			self.device = None
 			self.reportAvailability(False)
-		elif (device is not None) and (self.device is None):
+		elif (detected is True) and (self.device is None):
 			self.initDevice()
 			
 	def measureThread(self):
