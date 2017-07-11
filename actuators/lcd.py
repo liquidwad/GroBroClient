@@ -2,7 +2,7 @@ from RPLCD.i2c import CharLCD
 from cloud import *
 from config import *
 import threading
-import Queue
+import queue
 
 class CloudLCD(CloudActuator):
 	def __init__(self, name, cloud, addr, defaultString = ""):
@@ -67,7 +67,7 @@ class RelayLCD(CloudLCD):
 		self.positions['ll'] = (1,1)
 		self.positions['lr'] = (1,10)
 	
-		self.q = Queue()
+		self.q = queue.Queue()
 		self.t = threading.Thread(target = self.workerThread)
 		self.t.start()
 		self.data = {'ul':'', 'ur':'', 'll':'', 'lr':''}
