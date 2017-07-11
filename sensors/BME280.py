@@ -16,7 +16,7 @@ class BME280Sensor(CloudSensor):
 			try:
 				bme280 = BME280(mode=BME280_OSAMPLE_8)
 				if VERBOSE:
-					print self.name + " sensor Detected!"
+					print "BME280 sensor Detected!"
 			except Exception, e:
 				bme280 = None
 		
@@ -28,14 +28,14 @@ class BME280Sensor(CloudSensor):
 			return None
 		measurement = None
 		startTime = time.time()
-		while (time.time() - startTime) < timeout:
+		while ((time.time() - startTime) < timeout) and (self.device is not None):
 			try:
 				meas = self.deviceMeasure();
 				if( self.measureCheck(meas) ):
 					measurement = self.postMeasure(meas)
 					break;
 			except Exception, e:
-				if VERBOSE == True:
+				if VERBOSE:
 					print "BME280 measure fail: "
 					print e
 			time.sleep(0.2)

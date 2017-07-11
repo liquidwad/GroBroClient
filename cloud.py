@@ -196,6 +196,8 @@ class CloudSensor(CloudDevice):
 	def checkAndReportDevice(self):
 		device = I2C.get_i2c_device(self.address)
 		if (device is None) and (self.device is not None):
+			if VERBOSE:
+				print self.name + " sensor device disconnected"
 			self.device = None
 			self.reportAvailability(False)
 		elif (device is not None) and (self.device is None):
