@@ -7,7 +7,7 @@ bme280 = None
 
 class BME280Sensor(CloudSensor):
 	def __init__(self, name, cloud, measureInterval, channel_subtype = "BME280"):
-		self.address = 0x77
+		self.address = 0x76
 		CloudSensor.__init__(self, name, cloud, measureInterval, channel_subtype)
 
 	def initDevice(self):
