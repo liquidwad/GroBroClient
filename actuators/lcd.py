@@ -2,7 +2,7 @@ from RPLCD.i2c import CharLCD
 from cloud import *
 from config import *
 import threading
-import queue
+import Queue
 
 class CloudLCD(CloudActuator):
 	def __init__(self, name, cloud, addr, defaultString = ""):
