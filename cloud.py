@@ -50,7 +50,9 @@ class CloudManager:
 	def notifySubscribers(self, data, publisher = None):
 		dat = data
 		if not 'data' in data:
+			print "Getting data from cache:"
 			dat = Cache.get_cache()[data['channel_name']]
+			print dat
 		
 		subscribers = {}
 		if dat['channel_name'] in self.subscribers:
