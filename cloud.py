@@ -193,13 +193,13 @@ class CloudSensor(CloudDevice):
 		pass
 	
 	def checkAndReportDevice(self):
-        device = i2c.get_i2c_device(self.address)
-        if (device is None) and (self.device is not None):
-            self.device = None
-            self.reportAvailability(False)
-        elif (device is not None) and (self.device is None):
-            self.initDevice()
-            
+		device = i2c.get_i2c_device(self.address)
+		if (device is None) and (self.device is not None):
+			self.device = None
+			self.reportAvailability(False)
+		elif (device is not None) and (self.device is None):
+			self.initDevice()
+			
 	def measureThread(self):
 		while self.stopped is False:
 			startTime = time.time()
