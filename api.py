@@ -1,6 +1,7 @@
 from socketIO_client import SocketIO, LoggingNamespace
 import shelve
 import copy
+from config import *
 
 __CACHE__FILE__ = "grobro.cache"
 
@@ -21,7 +22,8 @@ class Cache:
 				#print channel
 				channel_name = channel['channel_name'].encode('ascii','ignore')
 				s[channel_name] = channel
-			print "Cache has been synced"
+			if VERBOSE:
+				print "Cache has been synced"
 		finally:
 			s.close()
 
@@ -32,7 +34,8 @@ class Cache:
 		try:
 			channel_name = channel['channel_name'].encode('ascii','ignore')
 			s[channel_name] = channel.update(channel)
-			print channel_name, " updated in cache"
+			if VERBOSE:
+				print channel_name, " updated in cache"
 		finally:
 			s.close()
 
