@@ -71,9 +71,11 @@ class CloudManagerThread(threading.Thread):
 		sensors.extend([temp_sensor, humidity_sensor, uv_sensor, ir_sensor, lumen_sensor])
 
 		print "Starting measurements..."
-
+		
+		#stagger sensor start so they don't all measure at the same time
 		for sensor in sensors:
 			sensor.start()
+			time.sleep(1)
 		
 		while True:
 			cloud.wait(999999)
