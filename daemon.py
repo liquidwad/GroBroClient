@@ -1,6 +1,7 @@
 from config import *
 from cloud import *
 from sensors.BME280 import *
+from sensors.SI1145 import *
 from actuators.relay import *
 from actuators.lcd import *
 import threading
@@ -63,8 +64,11 @@ class CloudManagerThread(threading.Thread):
 		print "Initializing sensors..."
 		# During initialization, each sensor object will report to the cloud whether or not it is available 
 		temp_sensor = TemperatureSensor("temperature", cloud, measureInterval = TEMP_INTERVAL)
-		humidity_sensor = HumiditySensor("humidity", cloud, TEMP_INTERVAL)
-		sensors.extend([temp_sensor, humidity_sensor])
+		humidity_sensor = HumiditySensor("humidity", cloud, measureInterval = HUMIDITY_INTERVAL)
+		uv_sensor = UVSensor("UV", cloud, measureInterval = UV_INTERVAL)
+		ir_sensor = IRSensor("IR", cloud, measureInterval = IR_INTERVAL)
+		lumen_sensor = LumenSensor("lumens", cloud, measureInterval = LUMEN_INTERVAL)
+		sensors.extend([temp_sensor, humidity_sensor, uv_sensor, ir_sensor, lumen_sensor])
 
 		print "Starting measurements..."
 

@@ -10,3 +10,6 @@ cd Adafruit_Python_BME280
 sudo python setup.py install
 cd ..
 sudo pip install RPLCD
+git clone https://github.com/THP-JOE/Python_SI1145.git
+cd Python_SI1145
+sudo python setup.py install
