@@ -1,7 +1,7 @@
 from config import *
 from cloud import *
 from sensors.BME280 import *
-from sensors.SI1145 import *
+from sensors.light import *
 from actuators.relay import *
 from actuators.lcd import *
 import threading
