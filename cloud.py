@@ -194,7 +194,7 @@ class CloudSensor(CloudDevice):
 		self.range_min = range_min
 		self.range_max = range_max
 
-		def reportAvailability(self, available, data = None):
+	def reportAvailability(self, available, data = None):
 		self.available = available
 		if data is None:
 			self.cloud.publish({
