@@ -201,18 +201,18 @@ class CloudSensor(CloudDevice):
 				'channel_name': self.name, 
 				'channel_type': self.channel_type, 
 				'channel_subtype': self.channel_subtype, 
-				'available': self.available
+				'available': self.available,
 				'range': {'min': self.range_min, 'max': self.range_max }
 			}, self)
 		else:
 			self.cloud.publish({
-			'channel_name': self.name, 
-			'channel_type': self.channel_type, 
-			'channel_subtype': self.channel_subtype, 
-			'available': self.available,
-			'range': {'min': self.range_min, 'max': self.range_max }
-			'data': data
-		}, self)
+				'channel_name': self.name, 
+				'channel_type': self.channel_type, 
+				'channel_subtype': self.channel_subtype, 
+				'available': self.available,
+				'range': {'min': self.range_min, 'max': self.range_max },
+				'data': data
+			}, self)
 			
 
 		if(VERBOSE and available):
