@@ -6,9 +6,9 @@ import time
 si1145 = None
 
 class SI1145Sensor(CloudSensor):
-	def __init__(self, name, cloud, measureInterval, channel_subtype = "SI1145"):
+	def __init__(self, name, cloud, measureInterval, range_min, range_max, channel_subtype = "SI1145"):
 		self.address = 0x60
-		CloudSensor.__init__(self, name, cloud, measureInterval, channel_subtype)
+		CloudSensor.__init__(self, name, cloud, measureInterval, range_min, range_max, channel_subtype)
 
 	def initDevice(self):
 		global si1145
@@ -52,24 +52,24 @@ class SI1145Sensor(CloudSensor):
 		return measurement
 
 class UVSensor(SI1145Sensor):
-	def __init__(self, name, cloud, 0, 12, measureInterval = 5):
-		SI1145Sensor.__init__(self,name, cloud, measureInterval, "UV")
+	def __init__(self, name, cloud, measureInterval = 5):
+		SI1145Sensor.__init__(self,name, cloud, measureInterval,  0, 12, "UV")
 
 	def deviceMeasure(self):
 		return self.device.readUV() / 100
 
 
 class IRSensor(SI1145Sensor):
-	def __init__(self, name, cloud, 0, 65536, measureInterval = 5):
-		SI1145Sensor.__init__(self,name, cloud, measureInterval, "IR")
+	def __init__(self, name, cloud, measureInterval = 5):
+		SI1145Sensor.__init__(self,name, cloud, measureInterval, 0, 65536, "IR")
 
 	def deviceMeasure(self):
 		return self.device.readIR()
 
 		 
 class LumenSensor(SI1145Sensor):
-	def __init__(self, name, cloud, 0, 65536 measureInterval = 5):
-		SI1145Sensor.__init__(self,name, cloud, measureInterval, "Lumen")
+	def __init__(self, name, cloud, measureInterval = 5):
+		SI1145Sensor.__init__(self,name, cloud, measureInterval, 0, 65536, "Lumen")
 
 	def deviceMeasure(self):
 		return self.device.readVisible()
