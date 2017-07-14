@@ -190,9 +190,9 @@ class CloudSensor(CloudDevice):
 		self.stopped = True
 		self.measureInterval = measureInterval
 		self.device = None
-		self.checkAndReportDevice()
 		self.range_min = range_min
 		self.range_max = range_max
+		self.checkAndReportDevice()
 
 	def reportAvailability(self, available, data = None):
 		self.available = available
