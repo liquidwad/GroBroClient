@@ -46,37 +46,30 @@ class SI1145Sensor(CloudSensor):
 		return 0
 
 	def measureCheck(self, measurement):
-		return True
+		 return (measurement is not None) and (measurement >= self.range_min) and (measurement <= self.range_max)
 
 	def postMeasure(self, measurement):
 		return measurement
 
 class UVSensor(SI1145Sensor):
-	def __init__(self, name, cloud, measureInterval = 5):
+	def __init__(self, name, cloud, 0, 12, measureInterval = 5):
 		SI1145Sensor.__init__(self,name, cloud, measureInterval, "UV")
 
 	def deviceMeasure(self):
-		return self.device.readUV()
+		return self.device.readUV() / 100
 
-	def measureCheck(self, measurement):
-		 return (measurement is not None) and (measurement > 0)
 
 class IRSensor(SI1145Sensor):
-	def __init__(self, name, cloud, measureInterval = 5):
+	def __init__(self, name, cloud, 0, 65536, measureInterval = 5):
 		SI1145Sensor.__init__(self,name, cloud, measureInterval, "IR")
 
 	def deviceMeasure(self):
 		return self.device.readIR()
 
-	def measureCheck(self, measurement):
-		 return (measurement is not None) and (measurement > 0)
 		 
 class LumenSensor(SI1145Sensor):
-	def __init__(self, name, cloud, measureInterval = 5):
+	def __init__(self, name, cloud, 0, 65536 measureInterval = 5):
 		SI1145Sensor.__init__(self,name, cloud, measureInterval, "Lumen")
 
 	def deviceMeasure(self):
 		return self.device.readVisible()
-
-	def measureCheck(self, measurement):
-		 return (measurement is not None) and (measurement > 0)

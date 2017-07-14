@@ -6,9 +6,9 @@ import time
 bme280 = None
 
 class BME280Sensor(CloudSensor):
-	def __init__(self, name, cloud, measureInterval, channel_subtype = "BME280"):
+	def __init__(self, name, cloud, measureInterval, range_min, range_max, channel_subtype = "BME280"):
 		self.address = 0x76
-		CloudSensor.__init__(self, name, cloud, measureInterval, channel_subtype)
+		CloudSensor.__init__(self, name, cloud, measureInterval, range_min, range_max, channel_subtype)
 
 	def initDevice(self):
 		global bme280
@@ -46,31 +46,25 @@ class BME280Sensor(CloudSensor):
 		return 0
 
 	def measureCheck(self, measurement):
-		return True
+		return (measurement is not None) and (measurement < self.range_max) and (measurement > self.range_min)
 
 	def postMeasure(self, measurement):
 		return measurement
 
 class HumiditySensor(BME280Sensor):
 	def __init__(self, name, cloud, measureInterval = 5):
-		BME280Sensor.__init__(self,name, cloud, measureInterval, "humidity")
+		BME280Sensor.__init__(self,name, cloud, measureInterval, 0, 100, "humidity")
 
 	def deviceMeasure(self):
 		return self.device.read_humidity()
 
-	def measureCheck(self, measurement):
-		 return (measurement is not None) and (measurement < 100) and (measurement > 20)
-
 class TemperatureSensor(BME280Sensor):
 	def __init__(self, name, cloud, measureInterval = 5, celcius = False):
-		BME280Sensor.__init__(self, name, cloud, measureInterval, "temperature")
+		BME280Sensor.__init__(self, name, cloud, measureInterval, -40, 85, "temperature")
 		self.celcius = celcius
 
 	def deviceMeasure(self):
 		return self.device.read_temperature()
-
-	def measureCheck(self, measurement):
-		 return (measurement is not None) and (measurement < 60) and (measurement > 0)
 
 	def postMeasure(self, measurement):
 		if not self.celcius:

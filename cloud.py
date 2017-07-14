@@ -184,14 +184,40 @@ class CloudActuator(CloudDevice):
 
 
 class CloudSensor(CloudDevice):
-	def __init__(self, name, cloud, measureInterval, channel_subtype = "undefined"):
+	def __init__(self, name, cloud, measureInterval, range_min, range_max, channel_subtype = "undefined"):
 		CloudDevice.__init__(self, name, cloud, "sensor", channel_subtype)
 		self.thread = threading.Thread(target = self.measureThread)
 		self.stopped = True
 		self.measureInterval = measureInterval
 		self.device = None
 		self.checkAndReportDevice()
+		self.range_min = range_min
+		self.range_max = range_max
 
+		def reportAvailability(self, available, data = None):
+		self.available = available
+		if data is None:
+			self.cloud.publish({
+				'channel_name': self.name, 
+				'channel_type': self.channel_type, 
+				'channel_subtype': self.channel_subtype, 
+				'available': self.available
+				'range': {'min': self.range_min, 'max': self.range_max }
+			}, self)
+		else:
+			self.cloud.publish({
+			'channel_name': self.name, 
+			'channel_type': self.channel_type, 
+			'channel_subtype': self.channel_subtype, 
+			'available': self.available,
+			'range': {'min': self.range_min, 'max': self.range_max }
+			'data': data
+		}, self)
+			
+
+		if(VERBOSE and available):
+			print self.name + " sensor was initialized"
+			
 	def checkAndReportDevice(self):
 		pass
 	
