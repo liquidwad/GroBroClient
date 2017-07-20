@@ -99,7 +99,8 @@ class CO2Sensor(CloudSensor):
 		return self.device.read_CO2()
 
 	def measureCheck(self, measurement):
-		return (measurement is not None) and (measurement < self.range_max) and (measurement > self.range_min)
+	    return measurement
+		#return (measurement is not None) and (measurement < self.range_max) and (measurement > self.range_min)
 
 	def postMeasure(self, measurement):
 		return measurement
