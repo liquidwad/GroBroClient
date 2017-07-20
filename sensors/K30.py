@@ -38,7 +38,6 @@ class IIC:
 	  
    def i2c(self,listin,nout):
 	   self.write(bytearray(listin))
-	   time.sleep(0.1)
 	   if nout != 0:
 		   rv = self.read(nout)
 	   return rv    
