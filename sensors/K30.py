@@ -1,58 +1,29 @@
-import io
-import fcntl
 from cloud import CloudSensor
 from config import *
 import time
-
-# Based on 'notSMB' for an easier way to access the i2c bus using just one
-# function. The main difference between this and notSMB is that the bus
-# here will be dedicated to 1 device address
-class IIC:
-   def __init__(self, device, bus):
-
-	  self.fr = io.open("/dev/i2c-"+str(bus), "rb", buffering=0)
-	  self.fw = io.open("/dev/i2c-"+str(bus), "wb", buffering=0)
-
-	  # set device address
-
-	  fcntl.ioctl(self.fr, 0x0703, device)
-	  fcntl.ioctl(self.fw, 0x0703, device)
-
-   def write(self, data):
-	  if type(data) is list:
-		 data = bytes(data)
-	  self.fw.write(data)
-
-   def read(self, count):
-	  s = ''
-	  l = []
-	  s = self.fr.read(count)
-	  if len(s) != 0:
-		 for n in s:
-			l.append(ord(n))
-	  return l
-	
-   def close(self):
-	  self.fw.close()
-	  self.fr.close()
-	  
-   def i2c(self,listin,nout):
-	   self.write(bytearray(listin))
-	   if nout != 0:
-		   rv = self.read(nout)
-	   return rv    
+import Adafruit_GPIO.I2C as I2C
 
 class K30: #CO2 Sensor
 	def __init__(self, address, bus):
 		self.address = address
 		self.bus = bus
+		# Create I2C device.
+        self._device = I2C.Device(address, bus)
 
 	def read_CO2(self):
 		co2Val = None
-		bus = IIC(self.address, self.bus)
-		resp = bus.i2c([0x22,0x00,0x08,0x2A],4)
-		co2Val = (resp[1]*256) + resp[2]
-		bus.close()
+		self._device.writeRaw8(0x22)
+		self._device.writeRaw8(0x00)
+		self._device.writeRaw8(0x08)
+		self._device.writeRaw8(0x2A)
+		
+		resp = []
+		resp[0] = self._device.readRaw8()
+		resp[1] = self._device.readRaw8()
+		resp[2] = self._device.readRaw8()
+		resp[3] = self._device.readRaw8()
+		
+        co2Val = (resp[1]*256) + resp[2]
 
 		return co2Val
 		
