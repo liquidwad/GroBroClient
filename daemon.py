@@ -2,6 +2,7 @@ from config import *
 from cloud import *
 from sensors.BME280 import *
 from sensors.light import *
+from sensors.K30 import *
 from actuators.relay import *
 from actuators.lcd import *
 import threading
@@ -65,17 +66,18 @@ class CloudManagerThread(threading.Thread):
 		# During initialization, each sensor object will report to the cloud whether or not it is available 
 		temp_sensor = TemperatureSensor("temperature", cloud, measureInterval = TEMP_INTERVAL)
 		humidity_sensor = HumiditySensor("humidity", cloud, measureInterval = HUMIDITY_INTERVAL)
+		co2_sensor = CO2Sensor("CO2", cloud, measureInterval = CO2_INTERVAL)
 		uv_sensor = UVSensor("UV", cloud, measureInterval = UV_INTERVAL)
 		ir_sensor = IRSensor("IR", cloud, measureInterval = IR_INTERVAL)
 		lumen_sensor = LumenSensor("lumens", cloud, measureInterval = LUMEN_INTERVAL)
-		sensors.extend([temp_sensor, humidity_sensor, uv_sensor, ir_sensor, lumen_sensor])
+		sensors.extend([temp_sensor, humidity_sensor, co2_sensor, uv_sensor, ir_sensor, lumen_sensor])
 
 		print "Starting measurements..."
 		
 		#stagger sensor start so they don't all measure at the same time
 		for sensor in sensors:
 			sensor.start()
-			time.sleep(1)
+			time.sleep(0.5)
 		
 		while True:
 			cloud.wait(999999)
