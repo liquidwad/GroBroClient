@@ -52,7 +52,7 @@ class K30: #CO2 Sensor
 		co2Val = None
 		bus = IIC(self.address, self.bus)
 		resp = bus.i2c([0x22,0x00,0x08,0x2A],4)
-		co2Val = (resp[2]*256) + resp[1]
+		co2Val = (resp[0]*256) + resp[1]
 		bus.close()
 
 		return co2Val
@@ -62,7 +62,7 @@ k30 = None
 class CO2Sensor(CloudSensor):
 	def __init__(self, name, cloud, measureInterval):
 		self.address = 0x60
-		CloudSensor.__init__(self, name, cloud, measureInterval, 0, 8000, "CO2")
+		CloudSensor.__init__(self, name, cloud, measureInterval, 0, 5000, "CO2")
 
 	def initDevice(self):
 		global k30
