@@ -15,8 +15,8 @@ class IIC:
 
 	  # set device address
 
-	  fcntl.ioctl(self.fr, I2C_SLAVE, device)
-	  fcntl.ioctl(self.fw, I2C_SLAVE, device)
+	  fcntl.ioctl(self.fr, 0x0703, device)
+	  fcntl.ioctl(self.fw, 0x0703, device)
 
    def write(self, data):
 	  if type(data) is list:
