@@ -52,7 +52,7 @@ class K30: #CO2 Sensor
 		co2Val = None
 		bus = IIC(self.address, self.bus)
 		resp = bus.i2c([0x22,0x00,0x08,0x2A],4)
-        co2Val = (resp[1]*256) + resp[2]
+		co2Val = (resp[1]*256) + resp[2]
 		bus.close()
 
 		return co2Val
@@ -100,7 +100,7 @@ class CO2Sensor(CloudSensor):
 		return self.device.read_CO2()
 
 	def measureCheck(self, measurement):
-	    return (measurement is not None) and (measurement < self.range_max) and (measurement > self.range_min)
+		return (measurement is not None) and (measurement < self.range_max) and (measurement > self.range_min)
 
 	def postMeasure(self, measurement):
 		return measurement
