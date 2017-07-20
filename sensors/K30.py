@@ -8,7 +8,7 @@ class K30: #CO2 Sensor
 		self.address = address
 		self.bus = bus
 		# Create I2C device.
-        self._device = I2C.Device(address, bus)
+		self._device = I2C.Device(address, bus)
 
 	def read_CO2(self):
 		co2Val = None
@@ -23,7 +23,7 @@ class K30: #CO2 Sensor
 		resp[2] = self._device.readRaw8()
 		resp[3] = self._device.readRaw8()
 		
-        co2Val = (resp[1]*256) + resp[2]
+		co2Val = (resp[1]*256) + resp[2]
 
 		return co2Val
 		
