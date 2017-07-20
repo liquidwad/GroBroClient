@@ -64,13 +64,12 @@ class CloudManagerThread(threading.Thread):
 		
 		print "Initializing sensors..."
 		# During initialization, each sensor object will report to the cloud whether or not it is available 
-		temp_sensor = TemperatureSensor("temperature", cloud, measureInterval = TEMP_INTERVAL)
-		humidity_sensor = HumiditySensor("humidity", cloud, measureInterval = HUMIDITY_INTERVAL)
-		co2_sensor = CO2Sensor("CO2", cloud, measureInterval = CO2_INTERVAL)
-		uv_sensor = UVSensor("UV", cloud, measureInterval = UV_INTERVAL)
-		ir_sensor = IRSensor("IR", cloud, measureInterval = IR_INTERVAL)
-		lumen_sensor = LumenSensor("lumens", cloud, measureInterval = LUMEN_INTERVAL)
-		sensors.extend([temp_sensor, humidity_sensor, co2_sensor, uv_sensor, ir_sensor, lumen_sensor])
+		sensors.append(TemperatureSensor("temperature", cloud, measureInterval = TEMP_INTERVAL))
+		sensors.append(HumiditySensor("humidity", cloud, measureInterval = HUMIDITY_INTERVAL))
+		#sensors.append(CO2Sensor("CO2", cloud, measureInterval = CO2_INTERVAL))
+		sensors.append(UVSensor("UV", cloud, measureInterval = UV_INTERVAL))
+		sensors.append(IRSensor("IR", cloud, measureInterval = IR_INTERVAL))
+		sensors.append(LumenSensor("lumens", cloud, measureInterval = LUMEN_INTERVAL))
 
 		print "Starting measurements..."
 		
