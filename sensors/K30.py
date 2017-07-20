@@ -51,9 +51,9 @@ class K30: #CO2 Sensor
 	def read_CO2(self):
 		co2Val = None
 		bus = IIC(self.address, self.bus)
-		resp = bus.i2c([0x22,0x00,0x08,0x2A],4)
-		print("{0:02x} {1:02x} {1:02x} {1:02x}".format(resp[0],resp[1],resp[2],resp[3]))
-		co2Val = (resp[3]*256) + resp[2]
+		resp = bus.i2c([0x22,0x00,0x08,0x2A],7)
+		print("{0:02x} {1:02x} {1:02x} {1:02x}".format(resp[0],resp[1],resp[2],resp[3],resp[4],resp[5],resp[6]))
+		co2Val = (resp[2]*256) + resp[1]
 		bus.close()
 
 		return co2Val
@@ -62,7 +62,7 @@ k30 = None
 
 class CO2Sensor(CloudSensor):
 	def __init__(self, name, cloud, measureInterval):
-		self.address = 0x60
+		self.address = 0x68
 		CloudSensor.__init__(self, name, cloud, measureInterval, 0, 5000, "CO2")
 
 	def initDevice(self):
