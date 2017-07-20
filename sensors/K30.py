@@ -62,7 +62,7 @@ k30 = None
 
 class CO2Sensor(CloudSensor):
 	def __init__(self, name, cloud, measureInterval):
-		self.address = 0x68
+		self.address = 0x60
 		CloudSensor.__init__(self, name, cloud, measureInterval, 0, 5000, "CO2")
 
 	def initDevice(self):
