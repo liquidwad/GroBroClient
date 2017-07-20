@@ -49,7 +49,7 @@ class K30: #CO2 Sensor
 
 	def read_CO2(self):
 		co2Val = None
-		bus = IIC(CO2_ADDR, I2CBUS)
+		bus = IIC(self.address, self.bus)
 		resp = bus.i2c([0x22,0x00,0x08,0x2A],4)
 		co2Val = (resp[1]*256) + resp[2]
 		bus.close()
