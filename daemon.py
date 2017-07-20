@@ -66,7 +66,7 @@ class CloudManagerThread(threading.Thread):
 		# During initialization, each sensor object will report to the cloud whether or not it is available 
 		sensors.append(TemperatureSensor("temperature", cloud, measureInterval = TEMP_INTERVAL))
 		sensors.append(HumiditySensor("humidity", cloud, measureInterval = HUMIDITY_INTERVAL))
-		#sensors.append(CO2Sensor("CO2", cloud, measureInterval = CO2_INTERVAL))
+		sensors.append(CO2Sensor("CO2", cloud, measureInterval = CO2_INTERVAL))
 		sensors.append(UVSensor("UV", cloud, measureInterval = UV_INTERVAL))
 		sensors.append(IRSensor("IR", cloud, measureInterval = IR_INTERVAL))
 		sensors.append(LumenSensor("lumens", cloud, measureInterval = LUMEN_INTERVAL))
