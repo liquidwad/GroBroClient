@@ -1,6 +1,6 @@
 API_HOST = 'https://grobroserver-liquidwad.c9users.io'
 DEVICE_KEY = 'RwsoNt3LkgPa2fUCS4KF'
-VERBOSE = True
+VERBOSE = False
 CONNECTION_TIMEOUT = 5
 TEMP_INTERVAL = 5
 HUMIDITY_INTERVAL = 5
