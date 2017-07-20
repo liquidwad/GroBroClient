@@ -52,7 +52,7 @@ class K30: #CO2 Sensor
 		co2Val = None
 		bus = IIC(self.address, self.bus)
 		resp = bus.i2c([0x22,0x00,0x08,0x2A],4)
-		print("0x{0:02x}{1:02x}{1:02x}{1:02x}".format(resp[0],resp[1],resp[2],resp[3]))
+		print("{0:02x} {1:02x} {1:02x} {1:02x}".format(resp[0],resp[1],resp[2],resp[3]))
 		co2Val = (resp[3]*256) + resp[2]
 		bus.close()
 
