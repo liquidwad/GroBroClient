@@ -56,7 +56,7 @@ class K30: #CO2 Sensor
 
 		return co2Val
 		
-k30 = none
+k30 = None
 
 class CO2Sensor(CloudSensor):
 	def __init__(self, name, cloud, measureInterval):
