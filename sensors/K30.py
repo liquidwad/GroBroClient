@@ -136,8 +136,7 @@ if __name__ == "__main__":
 	while True:
 		try:
 			k30.open_bus()
-			resp = k30.i2c([0x22,0x00,0x08,0x2A],4)
-			co2Val = (resp[1]*256) + resp[2]
+			co2Val = k30.read_CO2()
 			k30.close_bus()
 			print co2Val
 		except Exception, e:
