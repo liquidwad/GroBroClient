@@ -130,3 +130,15 @@ class CO2Sensor(CloudSensor):
 
 	def postMeasure(self, measurement):
 		return measurement
+
+if __name__ == "__main__":
+	k30 = K30(0x68, 1)
+	while True:
+		try:
+			k30.open_bus()
+			resp = k30.i2c([0x22,0x00,0x08,0x2A],4)
+			co2Val = (resp[1]*256) + resp[2]
+			k30.close_bus()
+			print co2Val
+		except Exception, e:
+			print e
