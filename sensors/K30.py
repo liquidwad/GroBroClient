@@ -11,53 +11,53 @@ I2CBUS = 1
 class IIC:
    def __init__(self, device, bus):
 
-      self.fr = io.open("/dev/i2c-"+str(bus), "rb", buffering=0)
-      self.fw = io.open("/dev/i2c-"+str(bus), "wb", buffering=0)
+	  self.fr = io.open("/dev/i2c-"+str(bus), "rb", buffering=0)
+	  self.fw = io.open("/dev/i2c-"+str(bus), "wb", buffering=0)
 
-      # set device address
+	  # set device address
 
-      fcntl.ioctl(self.fr, I2C_SLAVE, device)
-      fcntl.ioctl(self.fw, I2C_SLAVE, device)
+	  fcntl.ioctl(self.fr, I2C_SLAVE, device)
+	  fcntl.ioctl(self.fw, I2C_SLAVE, device)
 
    def write(self, data):
-      if type(data) is list:
-         data = bytes(data)
-      self.fw.write(data)
+	  if type(data) is list:
+		 data = bytes(data)
+	  self.fw.write(data)
 
    def read(self, count):
-      s = ''
-      l = []
-      s = self.fr.read(count)
-      if len(s) != 0:
-         for n in s:
-            l.append(ord(n))
-      return l
-    
+	  s = ''
+	  l = []
+	  s = self.fr.read(count)
+	  if len(s) != 0:
+		 for n in s:
+			l.append(ord(n))
+	  return l
+	
 
    def close(self):
-      self.fw.close()
-      self.fr.close()
-      
+	  self.fw.close()
+	  self.fr.close()
+	  
    def i2c(self,listin,nout):
-       self.write(bytearray(listin))
-       if nout != 0:
-           rv = self.read(nout)
-       return rv  
-       
-       
+	   self.write(bytearray(listin))
+	   if nout != 0:
+		   rv = self.read(nout)
+	   return rv  
+	   
+	   
 class K30: #CO2 Sensor
 	def __init__(self, address, bus):
 		self.address = address
 		self.bus = bus
 		# Create I2C device.
 		#self._device = I2C.Device(address, bus)
-        
-    def open_bus(self):
-        self._device = IIC(self.address, self.bus)
-    
-    def close_bus(self):
-        self._device.close()
-        
+		
+	def open_bus(self):
+		self._device = IIC(self.address, self.bus)
+	
+	def close_bus(self):
+		self._device.close()
+		
 	def read_CO2(self):
 		co2Val = None
 		#self._device.writeRaw8(0x22)
@@ -72,7 +72,7 @@ class K30: #CO2 Sensor
 		#resp[3] = self._device.readRaw8()
 		
 		resp = self._device.i2c([0x22,0x00,0x08,0x2A],4)
-        co2Val = (resp[1]*256) + resp[2]
+		co2Val = (resp[1]*256) + resp[2]
 
 		return co2Val
 		
@@ -119,7 +119,7 @@ class CO2Sensor(CloudSensor):
 		return measurement
 
 	def deviceMeasure(self):
-	    self.device.open_bus()
+		self.device.open_bus()
 		co2 = self.device.read_CO2()
 		self.device.close_bus()
 		return co2
