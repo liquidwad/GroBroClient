@@ -142,3 +142,4 @@ if __name__ == "__main__":
 			print co2Val
 		except Exception, e:
 			print e
+		time.sleep(1)
