@@ -93,6 +93,7 @@ class CO2Sensor(CloudSensor):
 				if VERBOSE:
 					print "K30 sensor Detected!"
 			except Exception, e:
+			    print e
 				k30 = None
 		
 		k30.close_bus()
