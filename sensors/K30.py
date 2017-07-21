@@ -1,5 +1,5 @@
 import io
-import fnctl
+import fcntl
 from cloud import CloudSensor
 from config import *
 import time
