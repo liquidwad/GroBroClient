@@ -7,7 +7,12 @@ import Queue
 class CloudLCD(CloudActuator):
 	def __init__(self, name, cloud, addr, defaultString = ""):
 		CloudActuator.__init__(self, name, cloud, "lcd")
-		self.lcd = CharLCD(address = addr, port = 1, cols = 16, rows = 2, dotsize = 8, charmap = 'A02')
+		while True:
+			try:
+				self.lcd = CharLCD(address = addr, port = 1, cols = 16, rows = 2, dotsize = 8, charmap = 'A02')
+			except:
+				sleep(0.1)
+				
 		self.write(defaultString)
 	
 	def write(self, string):
