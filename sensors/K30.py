@@ -83,6 +83,16 @@ class CO2Sensor(CloudSensor):
 		self.address = 0x68
 		CloudSensor.__init__(self, name, cloud, measureInterval, 0, 5000, "CO2")
 
+	def detect(self):
+		try:
+			temp = K30(self.address, 1)
+			temp.open_bus()
+			temp.close_bus()
+			return True
+		except:
+			return False
+			
+			
 	def initDevice(self):
 		global k30
 		if(k30 is None):

@@ -224,17 +224,16 @@ class CloudSensor(CloudDevice):
 	def initDevice(self):
 		pass
 	
-	def checkAndReportDevice(self):
-		detected = False
+	def detect(self):
 		global bus
 		try:
 			bus.read_byte(self.address)
-			detected = True
+			return True
 		except Exception, e:
-			print e
-			print "Failed to detect " + self.name
-			detected = False
-
+			return False
+			
+	def checkAndReportDevice(self):
+		detected = self.detect()
 		if (detected is False) and (self.device is not None):
 			if VERBOSE:
 				print self.name + " sensor device disconnected"
