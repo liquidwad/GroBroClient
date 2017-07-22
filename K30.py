@@ -139,8 +139,8 @@ if __name__ == "__main__":
 				k30.open_bus()
 				co2Val = k30.read_CO2()
 				k30.close_bus()
-				print co2Val
 				if (co2Val > 0 and co2Val < 5000):
+					print co2Val
 					break;
 			except Exception, e:
 				pass
