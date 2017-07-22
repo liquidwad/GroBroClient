@@ -3,6 +3,7 @@ from cloud import *
 from config import *
 import threading
 import Queue
+import time
 
 class CloudLCD(CloudActuator):
 	def __init__(self, name, cloud, addr, defaultString = ""):
@@ -10,8 +11,9 @@ class CloudLCD(CloudActuator):
 		while True:
 			try:
 				self.lcd = CharLCD(address = addr, port = 1, cols = 16, rows = 2, dotsize = 8, charmap = 'A02')
+				break;
 			except:
-				sleep(0.1)
+				time.sleep(0.1)
 				
 		self.write(defaultString)
 	
