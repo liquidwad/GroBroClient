@@ -50,6 +50,15 @@ class CloudManagerThread(threading.Thread):
 		#Now we have the latest data and we initialize actuators
 		last_data = cloud.pulled_data
 		
+		print "Initializing sensors..."
+		# During initialization, each sensor object will report to the cloud whether or not it is available 
+		sensors.append(TemperatureSensor("temperature", cloud, measureInterval = TEMP_INTERVAL))
+		sensors.append(HumiditySensor("humidity", cloud, measureInterval = HUMIDITY_INTERVAL))
+		sensors.append(CO2Sensor("CO2", cloud, measureInterval = CO2_INTERVAL))
+		sensors.append(UVSensor("UV", cloud, measureInterval = UV_INTERVAL))
+		sensors.append(IRSensor("IR", cloud, measureInterval = IR_INTERVAL))
+		sensors.append(LumenSensor("lumens", cloud, measureInterval = LUMEN_INTERVAL))
+		
 		print "Initializing actuators..."
 		#If this is the first time we ever run, the server will have an empty pull
 		
@@ -61,15 +70,6 @@ class CloudManagerThread(threading.Thread):
 			# Initialize relays
 			for i in range(0,8):
 				actuators.append(CloudRelay("relay" + str(i), cloud, i, last_data))
-		
-		print "Initializing sensors..."
-		# During initialization, each sensor object will report to the cloud whether or not it is available 
-		sensors.append(TemperatureSensor("temperature", cloud, measureInterval = TEMP_INTERVAL))
-		sensors.append(HumiditySensor("humidity", cloud, measureInterval = HUMIDITY_INTERVAL))
-		sensors.append(CO2Sensor("CO2", cloud, measureInterval = CO2_INTERVAL))
-		sensors.append(UVSensor("UV", cloud, measureInterval = UV_INTERVAL))
-		sensors.append(IRSensor("IR", cloud, measureInterval = IR_INTERVAL))
-		sensors.append(LumenSensor("lumens", cloud, measureInterval = LUMEN_INTERVAL))
 
 		print "Starting measurements..."
 		
