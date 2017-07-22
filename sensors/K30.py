@@ -50,29 +50,32 @@ class K30: #CO2 Sensor
 		self.address = address
 		self.bus = bus
 		# Create I2C device.
-		#self._device = I2C.Device(address, bus)
+		self._device = I2C.Device(address, bus)
 		
 	def open_bus(self):
-		self._device = IIC(self.address, self.bus)
+	    pass
+		#self._device = IIC(self.address, self.bus)
 	
 	def close_bus(self):
-		self._device.close()
+		pass
+		#self._device.close()
 		
 	def read_CO2(self):
 		co2Val = None
-		#self._device.writeRaw8(0x22)
-		#self._device.writeRaw8(0x00)
-		#self._device.writeRaw8(0x08)
-		#self._device.writeRaw8(0x2A)
+		self._device.writeRaw8(0x22)
+		self._device.writeRaw8(0x00)
+		self._device.writeRaw8(0x08)
+		self._device.writeRaw8(0x2A)
 		
-		#resp = []
-		#resp[0] = self._device.readRaw8()
-		#resp[1] = self._device.readRaw8()
-		#resp[2] = self._device.readRaw8()
-		#resp[3] = self._device.readRaw8()
-		
-		resp = self._device.i2c([0x22,0x00,0x08,0x2A],4)
-		co2Val = (resp[1]*256) + resp[2]
+		resp = []
+		resp[0] = self._device.readRaw8()
+		resp[1] = self._device.readRaw8()
+		resp[2] = self._device.readRaw8()
+		resp[3] = self._device.readRaw8()
+        
+        #resp = self._device.i2c([0x22,0x00,0x08,0x2A],4)
+        #co2Val = (resp[1]*256) + resp[2]
+
 
 		return co2Val
 		
@@ -84,6 +87,7 @@ class CO2Sensor(CloudSensor):
 		CloudSensor.__init__(self, name, cloud, measureInterval, 0, 5000, "CO2")
 
 	def detect(self):
+	    return True
 		try:
 			temp = K30(self.address, 1)
 			temp.open_bus()
@@ -103,7 +107,6 @@ class CO2Sensor(CloudSensor):
 				if VERBOSE:
 					print "K30 sensor Detected!"
 			except Exception, e:
-				print "Failed to initialize K30"
 				k30 = None
 		
 		k30.close_bus()
