@@ -62,20 +62,24 @@ class K30: #CO2 Sensor
 		
 	def read_CO2(self):
 		co2Val = None
-		self._device.writeRaw8(0x22)
-		self._device.writeRaw8(0x00)
-		self._device.writeRaw8(0x08)
-		self._device.writeRaw8(0x2A)
+		#self._device.writeRaw8(0x22)
+		#self._device.writeRaw8(0x00)
+		#self._device.writeRaw8(0x08)
+		#self._device.writeRaw8(0x2A)
 		
-		resp = []
-		resp[0] = self._device.readRaw8()
-		resp[1] = self._device.readRaw8()
-		resp[2] = self._device.readRaw8()
-		resp[3] = self._device.readRaw8()
+		#resp = []
+		#resp[0] = self._device.readRaw8()
+		#resp[1] = self._device.readRaw8()
+		#resp[2] = self._device.readRaw8()
+		#resp[3] = self._device.readRaw8()
 		
-		#resp = self._device.i2c([0x22,0x00,0x08,0x2A],4)
-		#co2Val = (resp[1]*256) + resp[2]
-
+		while True:
+			try:
+				resp = self._device.i2c([0x22,0x00,0x08,0x2A],4)
+				co2Val = (resp[1]*256) + resp[2]
+				break;
+			except:
+				pass
 
 		return co2Val
 		
@@ -127,7 +131,6 @@ class CO2Sensor(CloudSensor):
 			except Exception, e:
 				if VERBOSE:
 					print "K30 measure fail: "
-					print e
 			time.sleep(0.2)
 
 		return measurement
