@@ -230,7 +230,9 @@ class CloudSensor(CloudDevice):
 		try:
 			bus.read_byte(self.address)
 			detected = True
-		except:
+		except Exception, e:
+			print e
+			print "Failed to detect " + self.name
 			detected = False
 
 		if (detected is False) and (self.device is not None):
