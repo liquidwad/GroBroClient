@@ -50,15 +50,13 @@ class K30: #CO2 Sensor
 		self.address = address
 		self.bus = bus
 		# Create I2C device.
-		self._device = I2C.Device(address, bus)
+		#self._device = I2C.Device(address, bus)
 		
 	def open_bus(self):
-		pass
-		#self._device = IIC(self.address, self.bus)
+		self._device = IIC(self.address, self.bus)
 	
 	def close_bus(self):
-		pass
-		#self._device.close()
+		self._device.close()
 		
 	def read_CO2(self):
 		co2Val = None
