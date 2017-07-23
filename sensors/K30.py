@@ -6,14 +6,13 @@ import serial
 
 class K30:  # CO2 Sensor
 	def __init__(self):
-		self.ser = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=.5)
+		self.ser = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
 
 	def read_CO2(self):
 		self.ser.flushInput()
 		self.ser.write("\xFE\x44\x00\x08\x02\x9F\x25")
-		time.sleep(.5)
+		time.sleep(1)
 		resp = self.ser.read(7)
-		print "K30 response: " + resp
 		high = ord(resp[3])
 		low = ord(resp[4])
 		co2 = (high * 256) + low
@@ -35,11 +34,13 @@ class CO2Sensor(CloudSensor):
 
 	def detect(self):
 		global k30
+
 		if k30 is None:
 			try:
 				temp = K30()
+				co2 = temp.read_CO2()
 				temp.close()
-				return True
+				return co2 is not None
 			except:
 				return False
 		else:
