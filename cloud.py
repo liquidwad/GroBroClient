@@ -229,10 +229,8 @@ class CloudSensor(CloudDevice):
 		global bus
 		try:
 			bus.read_byte(self.address)
-			print 'Detected device at address: 0x{:02x}'.format(self.address)
 			return True
 		except:
-			print 'Failed to detect device at address: 0x{:02x}'.format(self.address)
 			return False
 			
 	def checkAndReportDevice(self):
