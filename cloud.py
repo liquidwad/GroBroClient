@@ -229,6 +229,7 @@ class CloudSensor(CloudDevice):
 		global bus
 		try:
 			bus.read_byte(self.address)
+			print "Detected device at address: " + self.address
 			return True
 		except:
 			return False
