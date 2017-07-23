@@ -7,6 +7,7 @@ import serial
 class K30:  # CO2 Sensor
 	def __init__(self):
 		self.ser = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=.5)
+		self.ser.flushInput()
 
 	def read_CO2(self):
 		self.ser.flushInput()
