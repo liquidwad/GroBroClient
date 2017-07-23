@@ -89,7 +89,6 @@ class CO2Sensor(CloudSensor):
 		CloudSensor.__init__(self, name, cloud, measureInterval, 0, 5000, "CO2")
 
 	def detect(self):
-		return True
 		try:
 			temp = K30(self.address, 1)
 			with self.cloud.i2c_lock:

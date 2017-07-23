@@ -256,8 +256,6 @@ class CloudSensor(CloudDevice):
 				self.cloud.publish( {'channel_name': self.name, 'data': { 'status': value } } )
 				if(VERBOSE):
 					print('%s: %d' % (self.name, value))
-			elif(VERBOSE):
-				print self.name + " sensor measurement returned none"
 					
 			deltaTime = time.time() - startTime
 			remainingTime = self.measureInterval - deltaTime
