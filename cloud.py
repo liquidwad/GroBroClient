@@ -228,7 +228,8 @@ class CloudSensor(CloudDevice):
 	def detect(self):
 		global bus
 		try:
-			bus.read_byte(self.address)
+			with self.cloud.i2c_lock:
+				bus.read_byte(self.address)
 			return True
 		except Exception, e:
 			return False
@@ -245,17 +246,14 @@ class CloudSensor(CloudDevice):
 			
 	def measureThread(self):
 		while self.stopped is False:
-			value = None
 			startTime = time.time()
-			with self.cloud.i2c_lock:
-				self.checkAndReportDevice()
-				if(self.device is not None):
-					value = self.measure()
-			if value is not None:
+			self.checkAndReportDevice()
+			if(self.device is not None):
+				value = self.measure()
 				self.cloud.publish( {'channel_name': self.name, 'data': { 'status': value } } )
 				if(VERBOSE):
 					print('%s: %d' % (self.name, value))
-			elif((self.device is not None) and VERBOSE):
+			elif(VERBOSE):
 				print self.name + "sensor measurement returned none"
 					
 			deltaTime = time.time() - startTime

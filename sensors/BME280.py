@@ -14,7 +14,8 @@ class BME280Sensor(CloudSensor):
 		global bme280
 		if(bme280 is None):
 			try:
-				bme280 = BME280(mode=BME280_OSAMPLE_8)
+				with self.cloud.i2c_lock:
+					bme280 = BME280(mode=BME280_OSAMPLE_8)
 				if VERBOSE:
 					print "BME280 sensor Detected!"
 			except Exception, e:
@@ -56,7 +57,9 @@ class HumiditySensor(BME280Sensor):
 		BME280Sensor.__init__(self,name, cloud, measureInterval, 0, 100, "humidity")
 
 	def deviceMeasure(self):
-		return self.device.read_humidity()
+		with self.cloud.i2c_lock:
+			result = self.device.read_humidity()
+		return result
 
 class TemperatureSensor(BME280Sensor):
 	def __init__(self, name, cloud, measureInterval = 5, celcius = False):
@@ -64,7 +67,9 @@ class TemperatureSensor(BME280Sensor):
 		self.celcius = celcius
 
 	def deviceMeasure(self):
-		return self.device.read_temperature()
+		with self.cloud.i2c_lock:
+			result = self.device.read_temperature()
+		return result
 
 	def postMeasure(self, measurement):
 		if not self.celcius:
