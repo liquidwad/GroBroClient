@@ -231,7 +231,7 @@ class CloudSensor(CloudDevice):
 			with self.cloud.i2c_lock:
 				bus.read_byte(self.address)
 			return True
-		except Exception, e:
+		except:
 			return False
 			
 	def checkAndReportDevice(self):
@@ -242,6 +242,8 @@ class CloudSensor(CloudDevice):
 			self.device = None
 			self.reportAvailability(False)
 		elif (detected is True) and (self.device is None):
+			if VERBOSE:
+				print self.name + "sensor connected"
 			self.initDevice()
 			
 	def measureThread(self):
