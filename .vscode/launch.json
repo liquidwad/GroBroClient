@@ -197,7 +197,7 @@
             "request": "attach",
             "localRoot": "${workspaceRoot}",
             "remoteRoot": "~/GroBroClient",
-            "port": 3000,
+            "port": 3001,
             "secret": "hafid",
             "host": "10.0.0.92"
         }
