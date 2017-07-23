@@ -13,6 +13,7 @@ class K30:  # CO2 Sensor
 		self.ser.write("\xFE\x44\x00\x08\x02\x9F\x25")
 		time.sleep(.5)
 		resp = self.ser.read(7)
+		print "K30 response: " + resp
 		high = ord(resp[3])
 		low = ord(resp[4])
 		co2 = (high * 256) + low
