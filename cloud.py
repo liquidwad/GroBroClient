@@ -242,7 +242,7 @@ class CloudSensor(CloudDevice):
 			self.reportAvailability(False)
 		elif (detected is True) and (self.device is None):
 			if VERBOSE:
-				print self.name + "sensor connected"
+				print self.name + " sensor connected"
 			self.initDevice()
 			
 	def measureThread(self):

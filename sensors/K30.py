@@ -35,16 +35,13 @@ class CO2Sensor(CloudSensor):
 	def detect(self):
 		global k30
 
-		if k30 is None:
-			try:
-				temp = K30()
-				co2 = temp.read_CO2()
-				temp.close()
-				return co2 is not None
-			except:
-				return False
-		else:
-			return k30.available()
+		try:
+			if(k30 is None):
+				k30 = K30()
+			co2 = k30.read_CO2()
+			return True
+		except:
+			return False
 
 	def initDevice(self):
 		global k30
@@ -73,7 +70,6 @@ class CO2Sensor(CloudSensor):
 			except Exception, e:
 				if VERBOSE:
 					print "K30 measure fail: "
-					print e
 			time.sleep(0.2)
 
 		return measurement
