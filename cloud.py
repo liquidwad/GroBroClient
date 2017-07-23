@@ -20,6 +20,7 @@ class CloudManager:
 		self.pulled_data = None
 		self.data_pulled = False
 		self.notifyOnPull = True
+		self.i2c_lock = Threading.Lock()
 
 	def wait(self, sec):
 		self.cloud_api.wait(sec)
@@ -244,16 +245,18 @@ class CloudSensor(CloudDevice):
 			
 	def measureThread(self):
 		while self.stopped is False:
+			value = None
 			startTime = time.time()
-			self.checkAndReportDevice()
-			if(self.device is not None):
-				value = self.measure()
-				if value is not None:
-					self.cloud.publish( {'channel_name': self.name, 'data': { 'status': value } } )
-					if(VERBOSE):
-						print('%s: %d' % (self.name, value))
-				elif(VERBOSE):
-					print self.name + "sensor measurement returned none"
+			with self.cloud.i2c_lock:
+				self.checkAndReportDevice()
+				if(self.device is not None):
+					value = self.measure()
+			if value is not None:
+				self.cloud.publish( {'channel_name': self.name, 'data': { 'status': value } } )
+				if(VERBOSE):
+					print('%s: %d' % (self.name, value))
+			elif(VERBOSE):
+				print self.name + "sensor measurement returned none"
 					
 			deltaTime = time.time() - startTime
 			remainingTime = self.measureInterval - deltaTime
