@@ -22,7 +22,7 @@ class K30:  # CO2 Sensor
 		self.ser.close()
 	
 	def available(self):
-		return self.ser.is_open()
+		return self.ser.isOpen()
 
 
 k30 = None
