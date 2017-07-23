@@ -228,8 +228,7 @@ class CloudSensor(CloudDevice):
 	def detect(self):
 		global bus
 		try:
-			with self.cloud.i2c_lock:
-				bus.read_byte(self.address)
+			bus.read_byte(self.address)
 			return True
 		except:
 			return False
@@ -256,7 +255,7 @@ class CloudSensor(CloudDevice):
 				if(VERBOSE):
 					print('%s: %d' % (self.name, value))
 			elif(VERBOSE):
-				print self.name + "sensor measurement returned none"
+				print self.name + " sensor measurement returned none"
 					
 			deltaTime = time.time() - startTime
 			remainingTime = self.measureInterval - deltaTime
