@@ -8,24 +8,16 @@ import time
 class CloudLCD(CloudActuator):
 	def __init__(self, name, cloud, addr, defaultString = ""):
 		CloudActuator.__init__(self, name, cloud, "lcd")
-		while True:
-			try:
-				with self.cloud.i2c_lock:
-					self.lcd = CharLCD(address = addr, port = 1, cols = 16, rows = 2, dotsize = 8, charmap = 'A02')
-				break;
-			except:
-				time.sleep(0.1)
-				
-		self.write(defaultString)
+		with self.cloud.i2c_lock:
+			self.lcd = CharLCD(address = addr, port = 1, cols = 16, rows = 2, dotsize = 8, charmap = 'A02')
+			self.write(defaultString)
 	
 	def write(self, string):
-		with self.cloud.i2c_lock:
-			self.clear()
-			self.lcd.write_string(string)
+		self.clear()
+		self.lcd.write_string(string)
 	
 	def clear(self):
-		with self.cloud.i2c_lock:
-			self.lcd.clear()
+		self.lcd.clear()
 		
 	def on_update(self, data):
 		if VERBOSE:
@@ -34,7 +26,8 @@ class CloudLCD(CloudActuator):
 			
 		if((data.value is not None) and (data.value is not self.state)):
 			self.state = data.value
-			self.write(data.value)
+			with self.cloud.i2c_lock:
+				self.write(data.value)
 			
 class RelayLCD(CloudLCD):
 	def __init__(self, name, cloud, addr, relays, pulled_data = {}):
