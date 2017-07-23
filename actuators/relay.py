@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 # 14 18 24 8
 # 15 23 25 7
 
-relay_gpio = [16,18,24,8,15,23,25,7]
+relay_gpio = [16,18,24,8,21,23,25,7]
 
 class CloudRelay(CloudActuator):
     def __init__(self, name, cloud, relayNumber, pulled_data = {}):
