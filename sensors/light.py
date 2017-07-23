@@ -12,15 +12,16 @@ class SI1145Sensor(CloudSensor):
 
 	def initDevice(self):
 		global si1145
-		if(si1145 is None):
-			try:
-				si1145 = SI1145.SI1145()
-				if VERBOSE:
-					print "SI1145 sensor Detected!"
-			except Exception, e:
-				si1145 = None
-		
-		self.device = si1145
+		with self.cloud.i2c_lock:
+			if(si1145 is None):
+				try:
+					si1145 = SI1145.SI1145()
+					if VERBOSE:
+						print "SI1145 sensor Detected!"
+				except Exception, e:
+					si1145 = None
+			
+			self.device = si1145
 		self.reportAvailability(si1145 is not None)
 		
 	def measure(self, timeout = SI1145_TIMEOUT):
@@ -56,7 +57,9 @@ class UVSensor(SI1145Sensor):
 		SI1145Sensor.__init__(self,name, cloud, measureInterval,  0, 12, "UV")
 
 	def deviceMeasure(self):
-		return self.device.readUV() / 100
+		with self.cloud.i2c_lock:
+			result = self.device.readUV() / 100
+		return result
 
 
 class IRSensor(SI1145Sensor):
@@ -64,7 +67,9 @@ class IRSensor(SI1145Sensor):
 		SI1145Sensor.__init__(self,name, cloud, measureInterval, 0, 65536, "IR")
 
 	def deviceMeasure(self):
-		return self.device.readIR()
+		with self.cloud.i2c_lock:
+			result = self.device.readIR()
+		return result
 
 		 
 class LumenSensor(SI1145Sensor):
@@ -72,4 +77,6 @@ class LumenSensor(SI1145Sensor):
 		SI1145Sensor.__init__(self,name, cloud, measureInterval, 0, 65536, "Lumen")
 
 	def deviceMeasure(self):
-		return self.device.readVisible()
+		with self.cloud.i2c_lock:
+			result = self.device.readVisible()
+		return result

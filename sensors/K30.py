@@ -92,8 +92,9 @@ class CO2Sensor(CloudSensor):
 		return True
 		try:
 			temp = K30(self.address, 1)
-			temp.open_bus()
-			temp.close_bus()
+			with self.cloud.i2c_lock:
+				temp.open_bus()
+				temp.close_bus()
 			return True
 		except:
 			return False
@@ -101,17 +102,18 @@ class CO2Sensor(CloudSensor):
 			
 	def initDevice(self):
 		global k30
-		if(k30 is None):
-			try:
-				k30 = K30(self.address, 1)
-				k30.open_bus()
-				
-				if VERBOSE:
-					print "K30 sensor Detected!"
-			except Exception, e:
-				k30 = None
-		
-		k30.close_bus()
+		with self.cloud.i2c_lock:
+			if(k30 is None):
+				try:
+					k30 = K30(self.address, 1)
+					k30.open_bus()
+					
+					if VERBOSE:
+						print "K30 sensor Detected!"
+				except Exception, e:
+					k30 = None
+			
+			k30.close_bus()
 		self.device = k30
 		self.reportAvailability(k30 is not None)
 		
@@ -134,9 +136,10 @@ class CO2Sensor(CloudSensor):
 		return measurement
 
 	def deviceMeasure(self):
-		self.device.open_bus()
-		co2 = self.device.read_CO2()
-		self.device.close_bus()
+		with self.cloud.i2c_bus:
+			self.device.open_bus()
+			co2 = self.device.read_CO2()
+			self.device.close_bus()
 		return co2
 
 	def measureCheck(self, measurement):
