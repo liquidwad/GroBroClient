@@ -7,7 +7,6 @@ import serial
 class K30:  # CO2 Sensor
 	def __init__(self):
 		self.ser = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=.5)
-		self.ser.flushInput()
 
 	def read_CO2(self):
 		self.ser.flushInput()
@@ -72,6 +71,7 @@ class CO2Sensor(CloudSensor):
 			except Exception, e:
 				if VERBOSE:
 					print "K30 measure fail: "
+					print e
 			time.sleep(0.2)
 
 		return measurement
