@@ -232,6 +232,7 @@ class CloudSensor(CloudDevice):
 			print "Detected device at address: " + self.address
 			return True
 		except:
+			print "Failed to detect device at address: " + self.address
 			return False
 			
 	def checkAndReportDevice(self):
