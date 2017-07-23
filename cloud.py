@@ -20,7 +20,7 @@ class CloudManager:
 		self.pulled_data = None
 		self.data_pulled = False
 		self.notifyOnPull = True
-		self.i2c_lock = Threading.Lock()
+		self.i2c_lock = threading.Lock()
 
 	def wait(self, sec):
 		self.cloud_api.wait(sec)
