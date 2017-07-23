@@ -41,6 +41,8 @@ class CO2Sensor(CloudSensor):
 			co2 = k30.read_CO2()
 			return True
 		except:
+			k30.close()
+			k30 = None
 			return False
 
 	def initDevice(self):
