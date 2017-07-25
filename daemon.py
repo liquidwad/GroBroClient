@@ -1,5 +1,6 @@
 from config import *
 from cloud import *
+from rules import RulesManager
 from sensors.BME280 import *
 from sensors.light import *
 from sensors.K30 import *
@@ -75,6 +76,10 @@ class CloudManagerThread(threading.Thread):
 			# Initialize relays
 			for i in range(0,8):
 				actuators.append(CloudRelay("relay" + str(i), cloud, i, last_data))
+
+		print "Initializing rules manager..."
+		rulesManager = RulesManager("rules", cloud, last_data)
+		rulesManager.start()
 
 		print "Starting measurements..."
 		

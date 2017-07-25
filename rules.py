@@ -1,4 +1,5 @@
 from cloud import *
+import time
 
 class Operator:
     def __init__(self, operator):
@@ -126,14 +127,56 @@ class Rule:
         if VERBOSE:
             print('%s got update:' % self.name)
             print data
-        
-        # If the update is a rules update, parse the conditions and actions from the rules channel update
-        if data['channel_name'] == self.name:
-            if( 'condition' in data ):
-                self.condition = self.parseCondition(data['condition'])
-            if( 'actions' in data ):
-                self.actions = self.parseActions(data['actions']) 
-        
+        if( data is None ):
+            return
+        if( 'condition' in data ):
+            self.condition = self.parseCondition(data['condition'])
+        if( 'actions' in data ):
+            self.actions = self.parseActions(data['actions']) 
     
+    def evaluate(self):
+        if(self.condition.isDirty()):
+            if(self.condition.evaluate() is True):
+                for action in self.actions:
+                    action.execute()
+        
+class RulesManager:
+    def __init__(self, name, cloud, pulled_data):
+        self.cloud = cloud
+        self.thread = threading.Thread(target = self.rulesThread)
+        self.thread.daemon = True
+        self.rules = {}
+        # Search pulled data for any existing rules and add them to the rules dictionary
+        if(pulled_data is not None):
+            matches = (entry for entry in pulled_data if (('channel_type' in entry) and (entry['channel_type']=="rule")))
+            for match in matches:
+                name = match['channel_name']
+                self.rules[name] = Rule(name,cloud)
+                self.rules[name].on_update(match)
+        # Subscribe to the rules manager channel for rule management updates
+        cloud.subscribe(self, name)
+    
+    def on_update(self, data):
+        if VERBOSE:
+            print('%s got update:' % self.name)
+            print data
+        if (data is None) or ('rules' not in data):
+            return
+        # There can be multiple entries 
+        for entry in data['rules']:
+            if('name' in entry) and ('action' in entry):
+                if (entry['action'] == "delete") and (entry['name'] in self.rules):
+                    del self.rules[entry['name']]
+                elif (entry['action'] == "add") and (entry['name'] not in self.rules):
+                    self.rules[entry['name']] = Rule(entry['name'])
+                    if('rule' in entry):
+                        self.rules[entry['name']].on_update(entry['rule'])
+    
+    def start(self):
+        self.thread.start()
 
-
+    def rulesThread(self):
+		while True:
+            for rule in self.rules:
+                rule.evaluate()
+            time.sleep(0.5)
