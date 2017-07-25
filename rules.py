@@ -41,6 +41,9 @@ class Condition:
 
     def isDirty(self):
         return self.dirty
+        
+    def setDirty(self, value):
+        self.dirty = value
 
     def evaluate(self):
         return False
@@ -62,6 +65,10 @@ class LeftRightCondition(Condition):
     
     def isDirty(self):
         return self.left.dirty() or self.right.dirty()
+    
+    def setDirty(self, value):
+        self.left.setDirty(value)
+        self.right.setDirty(value)
 
     def evaluate(self):
         return self.op.process(self.left.evaluate(), self.right.evaluate())
@@ -136,6 +143,7 @@ class Rule:
     
     def evaluate(self):
         if(self.condition.isDirty()):
+            self.condition.setDirty(False)
             if(self.condition.evaluate() is True):
                 for action in self.actions:
                     action.execute()
