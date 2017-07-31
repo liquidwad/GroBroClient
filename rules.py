@@ -102,7 +102,7 @@ class CloudCondition(Condition):
 
     def on_update(self, data):
         value = self.value
-        if(data is not None) and ('data' in data) and ('status' in data['status']):
+        if(data is not None) and ('data' in data) and ('status' in data['data']):
             value = data['data']['status']
 
         if(value != self.value):
