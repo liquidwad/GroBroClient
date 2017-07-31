@@ -139,12 +139,8 @@ class CloudManager:
 			
 		return None
 
-	def getDataFromCache(self, channel_name):
-		dat = None
-		cache = Cache.get_cache()
-		if channel_name in cache:
-			dat = cache[data['channel_name']]
-		return dat
+	def getDataFromCache(self, channel):
+		return self.getData(Cache.get_cache(), channel)
 		
 
 
