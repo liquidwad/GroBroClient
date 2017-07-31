@@ -149,12 +149,12 @@ class Rule:
         elif( 'channel_name' in c ):
             return CloudCondition(c['channel_name'], self.cloud)
         elif( 'conditions' in c and 'op' in c):
-            if (c['conditions'].length > 1):
+            if (len(c['conditions']) > 1):
                 conditions = []
                 for condition in c['conditions']:
                     conditions.append(self.parseCondition(condition))
                 return GroupCondition(conditions, c['op'])
-            elif (c['conditions'].length == 1):
+            elif (len(c['conditions']) == 1):
                 return self.parseCondition(c['conditions'][0])
             else:
                 return None
