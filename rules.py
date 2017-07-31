@@ -109,7 +109,7 @@ class CloudCondition(Condition):
 
 
 class GroupCondition(Condition):
-     def __init__(self, conditions, op):
+    def __init__(self, conditions, op):
         Condition.__init__(self)
         self.conditions = conditions
         self.op = op
@@ -227,7 +227,7 @@ class RulesManager:
         self.thread.start()
 
     def rulesThread(self):
-		while True:
+        while True:
             for rule in self.rules:
                 rule.evaluate()
             time.sleep(0.5)
