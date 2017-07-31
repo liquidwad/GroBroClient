@@ -71,7 +71,7 @@ class LeftRightCondition(Condition):
         self.op = op
 
     def isDirty(self):
-        return self.left.dirty() or self.right.dirty()
+        return self.left.isDirty() or self.right.isDirty()
 
     def setDirty(self, value):
         self.left.setDirty(value)
