@@ -86,6 +86,7 @@ class CloudCondition(Condition):
         Condition.__init__(self)
         self.cloud = cloud
         self.channel_name = channel_name
+        self.name = channel_name + "_monitor"
         # Get the last stored value for this channel if there is one
         data = cloud.getDataFromCache(channel_name)
         if (data is not None) and ('data' in data) and ('status' in data['data']):
