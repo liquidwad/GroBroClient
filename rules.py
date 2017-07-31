@@ -1,19 +1,20 @@
 from cloud import *
 import time
 
+
 class Operator:
     def __init__(self, operator):
         self.operator = operator
-    
+
     conditions = [
-        'Less than', 
-        'Less than or equal to', 
+        'Less than',
+        'Less than or equal to',
         'Not equal to',
         'Equals',
         'Greater than',
         'Greater than or equal to'
     ];
-    
+
     def process(self, left, right):
         if(self.operator == 'Greater than'):
             return left > right
@@ -32,17 +33,19 @@ class Operator:
         elif(self.operator == 'OR'):
             return left or right
 
+
 class Action:
     def __init__(self, actuator_name, value, cloud):
         self.actuator_name = actuator_name
         self.value = value
         self.cloud = cloud
-    
+
     def execute(self):
         data = self.cloud.getDataFromCache(self.actuator_name)
-        if( data is not None):
+        if(data is not None):
             data['data']['status'] = self.value
         self.cloud.publish(data)
+
 
 class Condition:
     def __init__(self):
@@ -50,20 +53,22 @@ class Condition:
 
     def isDirty(self):
         return self.dirty
-        
+
     def setDirty(self, value):
         self.dirty = value
 
     def evaluate(self):
         return False
-    
+
+
 class ConstCondition(Condition):
     def __init__(self, value):
         Condition.__init__(self)
         self.constant = value
-    
+
     def evaluate(self):
         return self.constant
+
 
 class LeftRightCondition(Condition):
     def __init__(self, left, op, right):
@@ -71,16 +76,17 @@ class LeftRightCondition(Condition):
         self.left = left
         self.right = right
         self.op = op
-    
+
     def isDirty(self):
         return self.left.dirty() or self.right.dirty()
-    
+
     def setDirty(self, value):
         self.left.setDirty(value)
         self.right.setDirty(value)
 
     def evaluate(self):
         return self.op.process(self.left.evaluate(), self.right.evaluate())
+
 
 class CloudCondition(Condition):
     def __init__(self, channel_name, cloud):
@@ -96,24 +102,25 @@ class CloudCondition(Condition):
 
     def evaluate(self):
         return self.constant
-    
+
     def on_update(self, data):
         constant = self.constant
         if(data is not None) and ('data' in data) and ('status' in data['status']):
             constant = data['data']['status']
-        
-        if( constant != self.constant):
+
+        if(constant != self.constant):
             self.constant = constant
             self.dirty = True
         else:
             self.dirty = False
 
-class GroupCondition(Condition ):
+
+class GroupCondition(Condition):
      def __init__(self, conditions, op):
         Condition.__init__(self)
         self.conditions = conditions
         self.op = op
-    
+
     def isDirty(self):
         self.dirty = False
         for condition in self.conditions:
