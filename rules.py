@@ -7,21 +7,21 @@ class Operator:
         self.operator = operator
 
     def process(self, left, right):
-        if(self.operator == 'Greater than'):
+        if(self.operator == "Greater than"):
             return left > right
-        elif(self.operator == 'Less than'):
+        elif(self.operator == "Less than"):
             return left < right
-        elif(self.operator == 'Less than or equal to'):
+        elif(self.operator == "Less than or equal to"):
             return left <= right
-        elif(self.operator == 'Greater than or equal to'):
+        elif(self.operator == "Greater than or equal to"):
             return left >= right
-        elif(self.operator == 'Equals'):
+        elif(self.operator == "Equals"):
             return left == right
-        elif(self.operator == 'Not equal to'):
+        elif(self.operator == "Not equal to"):
             return left != right
-        elif(self.operator == 'AND'):
+        elif(self.operator == "AND"):
             return left and right
-        elif(self.operator == 'OR'):
+        elif(self.operator == "OR"):
             return left or right
         else:
             return False
