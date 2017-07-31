@@ -170,7 +170,7 @@ class Rule:
         actions = []
         for a in data:
             if('actuator' in a) and ('value' in a):
-                self.actions.append(Action(a['actuator'], a['value'], self.cloud))
+                actions.append(Action(a['actuator'], a['value'], self.cloud))
         
         return actions
 
