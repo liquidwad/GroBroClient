@@ -148,7 +148,7 @@ class Rule:
         elif('left' in c) and ('right' in c) and ('op' in c):
             left = self.parseCondition(c['left'])
             right = self.parseCondition(c['right'])
-            op = c['op']
+            op = Operator(c['op'])
             return LeftRightCondition(left, op, right)
         elif( 'channel_name' in c ):
             return CloudCondition(c['channel_name'], self.cloud)
@@ -157,13 +157,13 @@ class Rule:
                 conditions = []
                 for condition in c['conditions']:
                     conditions.append(self.parseCondition(condition))
-                return GroupCondition(conditions, c['op'])
+                return GroupCondition(conditions, Operator(c['op']))
             elif (len(c['conditions']) == 1):
                 return self.parseCondition(c['conditions'][0])
             else:
                 return None
         elif( 'sensor' in c and 'op' in c and 'value' in c):
-            return LeftRightCondition( CloudCondition(c['sensor'], self.cloud), c['op'], ConstCondition(c['value']))
+            return LeftRightCondition( CloudCondition(c['sensor'], self.cloud), Operator(c['op']), ConstCondition(c['value']))
         else:
             return None
 
