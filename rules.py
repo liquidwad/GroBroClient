@@ -194,6 +194,7 @@ class Rule:
 class RulesManager:
     def __init__(self, name, cloud, pulled_data):
         self.cloud = cloud
+        self.name = name
         self.thread = threading.Thread(target = self.rulesThread)
         self.thread.daemon = True
         self.rules = {}
