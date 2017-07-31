@@ -6,15 +6,6 @@ class Operator:
     def __init__(self, operator):
         self.operator = operator
 
-    conditions = [
-        'Less than',
-        'Less than or equal to',
-        'Not equal to',
-        'Equals',
-        'Greater than',
-        'Greater than or equal to'
-    ];
-
     def process(self, left, right):
         if(self.operator == 'Greater than'):
             return left > right
