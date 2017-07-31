@@ -87,23 +87,26 @@ class CloudCondition(Condition):
         self.cloud = cloud
         self.channel_name = channel_name
         self.name = channel_name + "_monitor"
+        self.value = None
         # Get the last stored value for this channel if there is one
         data = cloud.getDataFromCache(channel_name)
+        print "Cloud Condition init:"
+        print data
         if (data is not None) and ('data' in data) and ('status' in data['data']):
-            self.constant = data['data']['status']
+            self.value = data['data']['status']
         # Subscribe to the channel to get updates from it
         cloud.subscribe(self, channel_name)
 
     def evaluate(self):
-        return self.constant
+        return self.value
 
     def on_update(self, data):
-        constant = self.constant
+        value = self.value
         if(data is not None) and ('data' in data) and ('status' in data['status']):
-            constant = data['data']['status']
+            value = data['data']['status']
 
-        if(constant != self.constant):
-            self.constant = constant
+        if(value != self.value):
+            self.value = value
             self.dirty = True
         else:
             self.dirty = False
@@ -235,5 +238,5 @@ class RulesManager:
     def rulesThread(self):
         while True:
             for rule in self.rules:
-                rule.evaluate()
+                self.rules[rule].evaluate()
             time.sleep(0.5)
