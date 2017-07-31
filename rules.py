@@ -23,6 +23,8 @@ class Operator:
             return left and right
         elif(self.operator == 'OR'):
             return left or right
+        else:
+            return False
 
 
 class Action:
