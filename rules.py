@@ -219,8 +219,12 @@ class RulesManager:
             if('name' in entry) and ('action' in entry):
                 if (entry['action'] == "delete") and (entry['name'] in self.rules):
                     del self.rules[entry['name']]
+                    if VERBOSE:
+                        print "Deleted rule ["+ entry['name'] +"] from rules manager"
                 elif (entry['action'] == "add") and (entry['name'] not in self.rules):
                     self.rules[entry['name']] = Rule(entry['name'])
+                    if VERBOSE:
+                        print "Added rule [" + entry['name'] + "] to rules manager"
                     if('rule' in entry):
                         self.rules[entry['name']].on_update(entry['rule'])
     
