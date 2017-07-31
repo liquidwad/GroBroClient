@@ -5,22 +5,31 @@ class Operator:
     def __init__(self, operator):
         self.operator = operator
     
+    conditions = [
+        'Less than', 
+        'Less than or equal to', 
+        'Not equal to',
+        'Equals',
+        'Greater than',
+        'Greater than or equal to'
+    ];
+    
     def process(self, left, right):
-        if(self.operator == ">"):
+        if(self.operator == 'Greater than'):
             return left > right
-        elif(self.operator == "<"):
+        elif(self.operator == 'Less than'):
             return left < right
-        elif(self.operator == "<="):
+        elif(self.operator == 'Less than or equal to'):
             return left <= right
-        elif(self.operator == ">="):
+        elif(self.operator == 'Greater than or equal to'):
             return left >= right
-        elif(self.operator == "=="):
+        elif(self.operator == 'Equals'):
             return left == right
-        elif(self.operator == "!="):
+        elif(self.operator == 'Not equal to'):
             return left != right
-        elif(self.operator == "&&"):
+        elif(self.operator == 'AND'):
             return left and right
-        elif(self.operator == "||"):
+        elif(self.operator == 'OR'):
             return left or right
 
 class Action:
@@ -99,6 +108,28 @@ class CloudCondition(Condition):
         else:
             self.dirty = False
 
+class GroupCondition(Condition ):
+     def __init__(self, conditions, op):
+        Condition.__init__(self)
+        self.conditions = conditions
+        self.op = op
+    
+    def isDirty(self):
+        self.dirty = False
+        for condition in self.conditions:
+            self.dirty = self.dirty or condition.isDirty()
+        return self.dirty
+    
+    def setDirty(self, value):
+        for condition in self.conditions:
+            condition.setDirty(value)
+
+    def evaluate(self):
+        result = self.conditions[0].evaluate()
+        for condition in self.conditions:
+            result = self.op.process(result, condition.evaluate())
+        return result
+
 
 class Rule:
     def __init__(self, name, cloud):
@@ -117,6 +148,18 @@ class Rule:
             return LeftRightCondition(left, op, right)
         elif( 'channel_name' in c ):
             return CloudCondition(c['channel_name'], self.cloud)
+        elif( 'conditions' in c and 'op' in c):
+            if (c['conditions'].length > 1):
+                conditions = []
+                for condition in c['conditions']:
+                    conditions.append(self.parseCondition(condition))
+                return GroupCondition(conditions, c['op'])
+            elif (c['conditions'].length == 1):
+                return self.parseCondition(c['conditions'][0])
+            else:
+                return None
+        elif( 'sensor' in c and 'op' in c and 'value' in c):
+            return LeftRightCondition( CloudCondition(c['sensor'], self.cloud), c['op'], ConstCondition(c['value']))
         else:
             return None
 
