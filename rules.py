@@ -222,7 +222,7 @@ class RulesManager:
                     if VERBOSE:
                         print "Deleted rule ["+ entry['name'] +"] from rules manager"
                 elif (entry['action'] == "add") and (entry['name'] not in self.rules):
-                    self.rules[entry['name']] = Rule(entry['name'])
+                    self.rules[entry['name']] = Rule(entry['name'], self.cloud)
                     if VERBOSE:
                         print "Added rule [" + entry['name'] + "] to rules manager"
                     if('rule' in entry):
