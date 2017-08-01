@@ -90,26 +90,40 @@ class RelayLCD(CloudLCD):
 	def updateLabel(self, data, tag):
 		w = 6
 		with self.cloud.i2c_lock:
-			self.lcd.cursor_pos = self.positions[tag]
+			self.setCursorPos(self.positions[tag])
 			if( len(data[tag]) < len(self.data[tag])):
-				self.lcd.write_string("      ");
-				self.lcd.cursor_pos = self.positions[tag]
-			self.lcd.write_string(data[tag][0:w].center(w))
+				self.writeToLCD("      ");
+				self.setCursorPos(self.positions[tag])
+			self.writeToLCD(data[tag][0:w].center(w))
 	   
 	def setRelayStatus(self, relay, status):
 		with self.cloud.i2c_lock:
 			if (relay is 0) or (relay is 2):
-				self.lcd.cursor_pos = (0,0)
+				self.setCursorPos((0,0))
 			elif (relay is 1) or (relay is 3):
-				self.lcd.cursor_pos = (0,9)
+				self.setCursorPos((0,9))
 			if (relay is 4) or (relay is 6):
-				self.lcd.cursor_pos = (1,0)
+				self.setCursorPos((1,0))
 			elif (relay is 5) or (relay is 7):
-				self.lcd.cursor_pos = (1,9)
+				self.setCursorPos((1,9))
 			
-			self.lcd.write_string('|' if status else '_')
-			#self.lcd.create_char(0, self.onChar if status else self.offChar)
-			#self.lcd.write_string('\x00')
+			self.writeToLCD('|' if status else '_')
+	
+	def setCursorPos(self, pos):
+		while True:
+			try:
+				self.lcd.cursor_pos = pos
+				break
+			except:
+				time.sleep(0.1)
+
+	def writeToLCD(self, s):
+		while True:
+			try:
+				self.lcd.write_string(s)
+				break
+			except:
+				time.sleep(0.1)
 	
 	def workerThread(self):
 		while True:
