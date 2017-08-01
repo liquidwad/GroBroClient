@@ -82,7 +82,10 @@ class LeftRightCondition(Condition):
         self.right.setDirty(value)
 
     def evaluate(self):
-        return self.op.process(self.left.evaluate(), self.right.evaluate())
+        result =  self.op.process(self.left.evaluate(), self.right.evaluate())
+        print "LeftRightCondition evaluated: "
+        print result
+        return result
 
 
 class CloudCondition(Condition):
