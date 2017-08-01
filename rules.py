@@ -144,7 +144,7 @@ class Rule:
     def parseCondition(self, c):
         #determine what type of condition this is...
         if( 'constant' in c ):
-            return ConstCondition(float(c['constant'])
+            return ConstCondition(float(c['constant']))
         elif('left' in c) and ('right' in c) and ('op' in c):
             left = self.parseCondition(c['left'])
             right = self.parseCondition(c['right'])
@@ -163,7 +163,7 @@ class Rule:
             else:
                 return None
         elif( 'sensor' in c and 'op' in c and 'value' in c):
-            return LeftRightCondition( CloudCondition(c['sensor'], self.cloud), Operator(c['op']), ConstCondition(float(c['value']))
+            return LeftRightCondition( CloudCondition(c['sensor'], self.cloud), Operator(c['op']), ConstCondition(float(c['value'])))
         else:
             return None
 
