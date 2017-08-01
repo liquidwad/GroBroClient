@@ -11,6 +11,7 @@ class Operator:
         print left
         print self.operator
         print right
+        print (self.operator == 'Greater than')
         if(self.operator == 'Greater than'):
             return left > right
         elif(self.operator == "Less than"):
