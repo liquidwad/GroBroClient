@@ -36,10 +36,12 @@ class Action:
             print "New action created for " + actuator_name
 
     def execute(self):
-        data = self.cloud.getDataFromCache(self.actuator_name)
-        if(data is not None):
-            data['data']['status'] = self.value
-        self.cloud.publish(data)
+        chan = self.cloud.getDataFromCache(self.actuator_name)
+        if(chan is not None):
+            if( 'data' not in chan ):
+                chan['data'] = {}
+            chan['data']['status'] = self.value
+        self.cloud.publish(chan)
 
 
 class Condition:
