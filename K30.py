@@ -111,8 +111,6 @@ class CO2Sensor(CloudSensor):
 				if( self.measureCheck(meas) ):
 					measurement = self.postMeasure(meas)
 					break;
-				else:
-					measurement = self.range_max
 			except Exception, e:
 				if VERBOSE:
 					print "K30 measure fail: "

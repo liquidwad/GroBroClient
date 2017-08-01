@@ -258,9 +258,10 @@ class CloudSensor(CloudDevice):
 			self.checkAndReportDevice()
 			if(self.device is not None):
 				value = self.measure()
-				self.cloud.publish( {'channel_name': self.name, 'data': { 'status': value } } )
-				if(VERBOSE):
-					print('%s: %d' % (self.name, value))
+				if( value is not None ):
+					self.cloud.publish( {'channel_name': self.name, 'data': { 'status': value } } )
+					if(VERBOSE):
+						print('%s: %d' % (self.name, value))
 					
 			deltaTime = time.time() - startTime
 			remainingTime = self.measureInterval - deltaTime
