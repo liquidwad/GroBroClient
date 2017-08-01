@@ -7,12 +7,6 @@ class Operator:
         self.operator = operator
 
     def process(self, left, right):
-        print "Processing: "
-        print left
-        print self.operator
-        print right
-        print (self.operator == 'Greater than')
-        print (float(left) > float(right))
         if (self.operator == 'Greater than'):
             return left > right
         elif (self.operator == "Less than"):
@@ -84,10 +78,7 @@ class LeftRightCondition(Condition):
         self.right.setDirty(value)
 
     def evaluate(self):
-        result =  self.op.process(self.left.evaluate(), self.right.evaluate())
-        print "LeftRightCondition evaluated: "
-        print result
-        return result
+        return self.op.process(self.left.evaluate(), self.right.evaluate())
 
 
 class CloudCondition(Condition):
@@ -153,7 +144,7 @@ class Rule:
     def parseCondition(self, c):
         #determine what type of condition this is...
         if( 'constant' in c ):
-            return ConstCondition(c['constant'])
+            return ConstCondition(float(c['constant'])
         elif('left' in c) and ('right' in c) and ('op' in c):
             left = self.parseCondition(c['left'])
             right = self.parseCondition(c['right'])
@@ -172,7 +163,7 @@ class Rule:
             else:
                 return None
         elif( 'sensor' in c and 'op' in c and 'value' in c):
-            return LeftRightCondition( CloudCondition(c['sensor'], self.cloud), Operator(c['op']), ConstCondition(c['value']))
+            return LeftRightCondition( CloudCondition(c['sensor'], self.cloud), Operator(c['op']), ConstCondition(float(c['value']))
         else:
             return None
 
