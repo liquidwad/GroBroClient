@@ -12,7 +12,7 @@ class Operator:
         print self.operator
         print right
         print (self.operator == 'Greater than')
-        print (float(left) > float(right)
+        print (float(left) > float(right))
         if (self.operator == 'Greater than'):
             return left > right
         elif (self.operator == "Less than"):
