@@ -142,7 +142,6 @@ class CloudManager:
 	def getDataFromCache(self, channel):
 		dat = None
 		cache = Cache.get_cache()
-		print cache
 		if channel in cache:
 			dat = cache[channel]
 		return dat
