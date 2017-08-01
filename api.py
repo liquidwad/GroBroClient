@@ -76,10 +76,10 @@ class GroBroAPI:
 	    Cache.put_cache(args)
 
 	def __on_update_response(self, args):
+		#put recieved channel into cache
+		Cache.update_cache(args)
 		self.__call_callback('update', args)
 
-		#put recieved channel into cache
-		#Cache.update_cache(data)
 
 	def push(self, data):
 		self.socketIO.emit('push', data)

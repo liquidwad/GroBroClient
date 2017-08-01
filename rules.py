@@ -41,7 +41,8 @@ class Action:
             if( 'data' not in chan ):
                 chan['data'] = {}
             chan['data']['status'] = self.value
-        self.cloud.publish(chan)
+        if ( (chan['data']['override'] is False) or (chan['data']['override'] is None) ):
+            self.cloud.publish(chan)
 
 
 class Condition:
