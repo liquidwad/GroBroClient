@@ -196,6 +196,8 @@ class Rule:
         if(self.condition.isDirty()):
             self.condition.setDirty(False)
             if(self.condition.evaluate() is True):
+                if VERBOSE:
+                    print "Determined that rule " + self.rule + " was met. Executing actions..."
                 for action in self.actions:
                     action.execute()
         
