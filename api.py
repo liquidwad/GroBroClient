@@ -33,7 +33,8 @@ class Cache:
 		
 		try:
 			channel_name = channel['channel_name'].encode('ascii','ignore')
-			s[channel_name] = channel.update(channel)
+			#s[channel_name] = channel.update(channel)
+			s[channel_name] = channel
 			if VERBOSE:
 				print channel_name, " updated in cache"
 		finally:
