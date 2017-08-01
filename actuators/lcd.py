@@ -124,7 +124,7 @@ class RelayLCD(CloudLCD):
 		if VERBOSE:
 			print('%s got update:' % self.name)
 			print data
-		if( 'data' in data['channel_name'] ):
+		if( 'data' in data):
 			if data['channel_name'] == self.name:
 				dat = data['data']
 				if((dat is not None) and (dat is not self.data)):
