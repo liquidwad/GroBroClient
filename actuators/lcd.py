@@ -124,28 +124,28 @@ class RelayLCD(CloudLCD):
 		if VERBOSE:
 			print('%s got update:' % self.name)
 			print data
-		
-		if data['channel_name'] == self.name:
-			dat = data['data']
-			if((dat is not None) and (dat is not self.data)):
-				self.updateDisplay(dat)
-				self.data = dat
-		elif data['channel_name'] == "relay0":
-			self.q.put({'method':"setRelayStatus", 'relay': 0, 'status': data['data']['status']})
-		elif data['channel_name'] == "relay1":
-			self.q.put({'method':"setRelayStatus", 'relay': 1, 'status': data['data']['status']})
-		elif data['channel_name'] == "relay2":
-			self.q.put({'method':"setRelayStatus", 'relay': 2, 'status': data['data']['status']})
-		elif data['channel_name'] == "relay3":
-			self.q.put({'method':"setRelayStatus", 'relay': 3, 'status': data['data']['status']})
-		elif data['channel_name'] == "relay4":
-			self.q.put({'method':"setRelayStatus", 'relay': 4, 'status': data['data']['status']})
-		elif data['channel_name'] == "relay5":
-			self.q.put({'method':"setRelayStatus", 'relay': 5, 'status': data['data']['status']})
-		elif data['channel_name'] == "relay6":
-			self.q.put({'method':"setRelayStatus", 'relay': 6, 'status': data['data']['status']})
-		elif data['channel_name'] == "relay7":
-			self.q.put({'method':"setRelayStatus", 'relay': 7, 'status': data['data']['status']})
+		if( 'data' in data['channel_name'] ):
+			if data['channel_name'] == self.name:
+				dat = data['data']
+				if((dat is not None) and (dat is not self.data)):
+					self.updateDisplay(dat)
+					self.data = dat
+			elif data['channel_name'] == "relay0":
+				self.q.put({'method':"setRelayStatus", 'relay': 0, 'status': data['data']['status']})
+			elif data['channel_name'] == "relay1":
+				self.q.put({'method':"setRelayStatus", 'relay': 1, 'status': data['data']['status']})
+			elif data['channel_name'] == "relay2":
+				self.q.put({'method':"setRelayStatus", 'relay': 2, 'status': data['data']['status']})
+			elif data['channel_name'] == "relay3":
+				self.q.put({'method':"setRelayStatus", 'relay': 3, 'status': data['data']['status']})
+			elif data['channel_name'] == "relay4":
+				self.q.put({'method':"setRelayStatus", 'relay': 4, 'status': data['data']['status']})
+			elif data['channel_name'] == "relay5":
+				self.q.put({'method':"setRelayStatus", 'relay': 5, 'status': data['data']['status']})
+			elif data['channel_name'] == "relay6":
+				self.q.put({'method':"setRelayStatus", 'relay': 6, 'status': data['data']['status']})
+			elif data['channel_name'] == "relay7":
+				self.q.put({'method':"setRelayStatus", 'relay': 7, 'status': data['data']['status']})
 
 class LeftRelayLCD(RelayLCD):
 	def __init__(self, name, cloud, data = {}):
