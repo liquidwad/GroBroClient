@@ -32,6 +32,8 @@ class Action:
         self.actuator_name = actuator_name
         self.value = value
         self.cloud = cloud
+        if VERBOSE:
+            print "New action created for " + actuator_name
 
     def execute(self):
         data = self.cloud.getDataFromCache(self.actuator_name)
