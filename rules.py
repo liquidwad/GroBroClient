@@ -7,7 +7,10 @@ class Operator:
         self.operator = operator
 
     def process(self, left, right):
-        print('Processing: %d %s %d' % (left, self.operator, right))
+        print "Processing: "
+        print left
+        print self.operator
+        print right
         if(self.operator == "Greater than"):
             return left > right
         elif(self.operator == "Less than"):
