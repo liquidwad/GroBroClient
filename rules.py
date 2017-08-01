@@ -193,7 +193,7 @@ class Rule:
             self.actions = self.parseActions(data['actions']) 
     
     def evaluate(self):
-        if(self.condition.isDirty()):
+        if(self.condition is not None and self.condition.isDirty()):
             self.condition.setDirty(False)
             if(self.condition.evaluate() is True):
                 if VERBOSE:
