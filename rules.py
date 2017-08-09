@@ -218,6 +218,7 @@ class RulesManager:
             if('name' in entry) and ('action' in entry):
                 if (entry['action'] == "delete") and (entry['name'] in self.rules):
                     del self.rules[entry['name']]
+                    self.cloud.publish({'channel_name': entry['name']})
                 elif (entry['action'] == "add") and (entry['name'] not in self.rules):
                     self.rules[entry['name']] = Rule(entry['name'])
                     if('rule' in entry):
