@@ -139,11 +139,11 @@ class CloudManager:
 			
 		return None
 
-	def getDataFromCache(self, channel_name):
+	def getDataFromCache(self, channel):
 		dat = None
 		cache = Cache.get_cache()
-		if channel_name in cache:
-			dat = cache[data['channel_name']]
+		if channel in cache:
+			dat = cache[channel]
 		return dat
 		
 
@@ -258,9 +258,10 @@ class CloudSensor(CloudDevice):
 			self.checkAndReportDevice()
 			if(self.device is not None):
 				value = self.measure()
-				self.cloud.publish( {'channel_name': self.name, 'data': { 'status': value } } )
-				if(VERBOSE):
-					print('%s: %d' % (self.name, value))
+				if( value is not None ):
+					self.cloud.publish( {'channel_name': self.name, 'data': { 'status': value } } )
+					if(VERBOSE):
+						print('%s: %d' % (self.name, value))
 					
 			deltaTime = time.time() - startTime
 			remainingTime = self.measureInterval - deltaTime
