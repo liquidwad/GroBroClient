@@ -216,7 +216,7 @@ class RulesManager:
         if(pulled_data is not None):
             matches = (entry for entry in pulled_data if (('channel_type' in entry) and (entry['channel_type']=="rule")))
             for match in matches:
-                print('RulesManager found match for %' % match['channel_name'] )
+                print('RulesManager found match for %s' % match['channel_name'] )
                 name = match['channel_name']
                 self.rules[name] = Rule(name,cloud)
                 self.rules[name].on_update(match)
