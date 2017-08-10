@@ -231,12 +231,12 @@ class RulesManager:
         # There can be multiple entries 
         for entry in data['rules']:
             if('name' in entry) and ('action' in entry):
-                if (entry['action'] == "delete") and (entry['name'] in self.rules):
+                if (entry['action'] == 'delete') and (entry['name'] in self.rules):
                     del self.rules[entry['name']]
                     self.cloud.publish({'channel_name': entry['name'], 'delete': True})
                     if VERBOSE:
                         print "Deleted rule ["+ entry['name'] +"] from rules manager"
-                elif (entry['action'] == "add") and (entry['name'] not in self.rules):
+                elif (entry['action'] == 'add') and (entry['name'] not in self.rules):
                     self.rules[entry['name']] = Rule(entry['name'], self.cloud)
                     if VERBOSE:
                         print "Added rule [" + entry['name'] + "] to rules manager"
