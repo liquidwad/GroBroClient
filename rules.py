@@ -220,6 +220,10 @@ class RulesManager:
                 name = match['channel_name']
                 self.rules[name] = Rule(name,cloud)
                 self.rules[name].on_update(match)
+            match = (entry in pulled_data if ('channel_name' == "rules"))
+            if(match is not None):
+                self.on_update(match)
+                    
         # Subscribe to the rules manager channel for rule management updates
         cloud.subscribe(self, self.name)
     
