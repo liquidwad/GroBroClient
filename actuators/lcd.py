@@ -37,6 +37,15 @@ class RelayLCD(CloudLCD):
 		cloud.subscribe(self, relays[1])
 		cloud.subscribe(self, relays[2])
 		cloud.subscribe(self, relays[3])
+		
+		# create relay to position mapping
+		self.relayPosMap = {}
+		self.relayPosMap['ul'] = relays[0]
+		self.relayPosMap['ur'] = relays[1]
+		self.relayPosMap['ll'] = relays[2]
+		self.relayPosMap['lr'] = relays[3]
+		
+		
 		data = cloud.getData(pulled_data, self.name)
 		if data is None:
 			data = {'ul': relays[0], 'ur':relays[1], 'll':relays[2], 'lr':relays[3]}
@@ -86,6 +95,9 @@ class RelayLCD(CloudLCD):
 		for tag in tags:
 			if( data[tag] != self.data[tag]):
 				self.q.put({'method':"updateLabel", 'data':data, 'tag':tag})
+				self.cloud.publish({
+					'channel_name': self.relayPosMap[tag], 
+					'display': data[tag]});
 	
 	def updateLabel(self, data, tag):
 		w = 6
