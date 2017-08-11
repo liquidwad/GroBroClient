@@ -62,9 +62,8 @@ class HumiditySensor(BME280Sensor):
 		return result
 
 class TemperatureSensor(BME280Sensor):
-	def __init__(self, name, cloud, measureInterval = 5, celcius = False):
-		BME280Sensor.__init__(self, name, cloud, measureInterval, -40, 85, "temperature")
-		self.celcius = celcius
+	def __init__(self, name, cloud, measureInterval = 5):
+		BME280Sensor.__init__(self, name, cloud, measureInterval, -40, 100, "temperature")
 
 	def deviceMeasure(self):
 		with self.cloud.i2c_lock:
@@ -72,8 +71,4 @@ class TemperatureSensor(BME280Sensor):
 		return result
 
 	def postMeasure(self, measurement):
-		if not self.celcius:
-			# convert from celcius to fahrenheit
-			measurement = measurement*1.8 + 32
-
 		return measurement
