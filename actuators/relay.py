@@ -33,7 +33,7 @@ class CloudRelay(CloudActuator):
 		elif( newValue == "True" or newValue == "true" or newValue == "On" or newValue == 1):
 			self.gpioState =  GPIO.LOW
 		GPIO.output(relay_gpio[self.relayNumber], self.gpioState) 
-		self.cloud.publish( { 'channel_name': self.name, 'data': {'status': self.state}})
+		self.cloud.publish( { 'channel_name': self.name, 'data': {'status': self.state}}, self)
 		if(VERBOSE):
 			print('%s was set to %s' % (self.name, newValue))
     
