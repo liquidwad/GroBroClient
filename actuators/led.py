@@ -44,7 +44,7 @@ class CloudLED(CloudActuator):
     
     def ledThread(self):
         self.dummy = (self.dummy + 1) % 512
-        changeValue(0, float(self.dummy)/512.0 )
+        self.changeValue(0, float(self.dummy)/512.0 )
         time.sleep(0.1)
         
     def changeValue(self, channel, duty):
