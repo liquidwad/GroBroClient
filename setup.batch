@@ -13,3 +13,6 @@ sudo pip install RPLCD
 git clone https://github.com/THP-JOE/Python_SI1145.git
 cd Python_SI1145
 sudo python setup.py install
+git clone https://github.com/adafruit/Adafruit_Python_PCA9685.git
+cd Adafruit_Python_PCA9685.git
+sudo python setup.py install

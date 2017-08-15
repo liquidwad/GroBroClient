@@ -181,6 +181,14 @@ class CloudDevice:
 		if VERBOSE:
 			print('%s got update:' % self.name)
 			print data
+		
+	def detect(self):
+		global bus
+		try:
+			bus.read_byte(self.address)
+			return True
+		except:
+			return False
 
 class CloudActuator(CloudDevice):
 	def __init__(self, name, cloud, channel_subtype = "undefined"):
@@ -231,14 +239,6 @@ class CloudSensor(CloudDevice):
 	
 	def initDevice(self):
 		pass
-	
-	def detect(self):
-		global bus
-		try:
-			bus.read_byte(self.address)
-			return True
-		except:
-			return False
 			
 	def checkAndReportDevice(self):
 		detected = self.detect()

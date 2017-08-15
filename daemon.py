@@ -6,6 +6,7 @@ from sensors.light import *
 from sensors.K30 import *
 from actuators.relay import *
 from actuators.lcd import *
+from actuators.led import *
 import threading
 import time
 import signal
@@ -77,6 +78,8 @@ class CloudManagerThread(threading.Thread):
 			for i in range(0,8):
 				actuators.append(CloudRelay("relay" + str(i), cloud, i, last_data))
 
+		actuators.append(CloudLED("whiteLED", cloud, 0x43, last_data))
+		
 		print "Initializing rules manager..."
 		rulesManager = RulesManager("rules", cloud, last_data)
 		rulesManager.start()
