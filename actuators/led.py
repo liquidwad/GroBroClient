@@ -18,7 +18,7 @@ class CloudLED(CloudActuator):
                 self.reportAvailability(True)
             
             self.state = initialValue
-            self.changeValue(initialValue)
+            self.changeValue(0, initialValue)
         else:
             self.reportAvailability(False)
     
