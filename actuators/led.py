@@ -2,13 +2,17 @@ from cloud import *
 from config import *
 import RPi.GPIO as GPIO
 import Adafruit_PCA9685
+import time
 
 
 class CloudLED(CloudActuator):
     def __init__(self, name, cloud, address, pulled_data = {}):
         CloudActuator.__init__(self, name, cloud, "led")
+        self.thread = threading.Thread(target = self.ledThread)
+        self.thread.daemon = True
         self.address = address
-        self.device = None;
+        self.device = None
+        self.dummy = 0
         if self.initDevice():
             initialValue = cloud.getValue(pulled_data, self.name)
             if initialValue is None:
@@ -19,6 +23,8 @@ class CloudLED(CloudActuator):
             
             self.state = initialValue
             self.changeValue(0, initialValue)
+            
+            self.thread.start()
         else:
             self.reportAvailability(False)
     
@@ -36,10 +42,15 @@ class CloudLED(CloudActuator):
         
         return False
     
+    def ledThread(self):
+        self.dummy = (self.dummy + 1) % 512
+		changeValue(0, float(self.dummy)/512.0 )
+		time.sleep(0.1)
         
     def changeValue(self, channel, duty):
         resolution = 4095.0
-        self.device.set_pwm(channel, 0, int(duty*resolution))
+        with self.cloud.i2c_lock:
+            self.device.set_pwm(channel, 0, int(duty*resolution))
         
         if(VERBOSE):
             print('%s chan %d was set to %s' % (self.name, channel, duty))
