@@ -3,6 +3,7 @@ from config import *
 import RPi.GPIO as GPIO
 import Adafruit_PCA9685
 import time
+import math
 
 
 class CloudLED(CloudActuator):
@@ -43,9 +44,12 @@ class CloudLED(CloudActuator):
         return False
     
     def ledThread(self):
+        startTime = time.time()
         while True:
-            self.dummy = (self.dummy + 1) % 128
-            self.changeValue(0, float(self.dummy)/128.0 )
+            t = time.time() - startTime
+            f = 10
+            brightness = (math.sin(2*math.pi*f*t)+1)*0.5
+            self.changeValue(0, brightness )
             time.sleep(0.1)
         
     def changeValue(self, channel, duty):
