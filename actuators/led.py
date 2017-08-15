@@ -43,9 +43,10 @@ class CloudLED(CloudActuator):
         return False
     
     def ledThread(self):
-        self.dummy = (self.dummy + 1) % 512
-        self.changeValue(0, float(self.dummy)/512.0 )
-        time.sleep(0.1)
+        while True:
+            self.dummy = (self.dummy + 1) % 512
+            self.changeValue(0, float(self.dummy)/512.0 )
+            time.sleep(0.1)
         
     def changeValue(self, channel, duty):
         resolution = 4095.0
