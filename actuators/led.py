@@ -55,7 +55,7 @@ class CloudLED(CloudActuator):
     def changeValue(self, channel, duty):
         resolution = 4095.0
         with self.cloud.i2c_lock:
-            self.device.set_pwm(channel, 0, int(duty*resolution))
+            self.device.set_pwm(channel, 0, int((1.0-duty)*resolution))
         
         if(VERBOSE):
             print('%s chan %d was set to %s' % (self.name, channel, duty))
