@@ -50,7 +50,7 @@ class CloudLED(CloudActuator):
             f = 0.1
             brightness = (math.sin(2*math.pi*f*t)+1)*0.5
             self.changeValue(0, brightness )
-            time.sleep(0.1)
+            time.sleep(0.05)
         
     def changeValue(self, channel, duty):
         resolution = 4095.0
