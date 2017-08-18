@@ -47,7 +47,7 @@ class CloudLED(CloudActuator):
         startTime = time.time()
         while True:
             t = time.time() - startTime
-            f = 0.1
+            f = 0.3
             brightness = (math.sin(2*math.pi*f*t)+1)*0.5
             self.changeValue(0, brightness )
             time.sleep(0.05)
