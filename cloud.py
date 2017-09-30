@@ -121,11 +121,10 @@ class CloudManager:
 			
 		for chan in data:
 			if chan['channel_name'] == channel:
-				state = chan['data']['status']
-				if state is not None:
-					return state
-				else:
-					return None
+				if ('data' in chan) and ('status' in chan['data']):
+					state = chan['data']['status']
+					if state is not None:
+						return state
 		return None
 		
 	def getData(self, pulled_data, channel):
