@@ -88,17 +88,11 @@ class CloudLED(CloudActuator):
         self.profiles[channel] = samples
         if VERBOSE:
             print('Assigned profile to channel %d' % (channel))
-            print(samples)
         
     def on_update(self, data):
         if VERBOSE:
             print('%s got update:' % self.name)
             print data
-        
-        state = data['data']['state']
-        if((state is not None) and (state is not self.state)):
-            self.state = state
-            self.changeValue(0, state)
         
         if( (data is not None) and ('profiles' in data) and ('ch0' in data['profiles'])):
             self.applyProfile(0, data['profiles']['ch0'])
