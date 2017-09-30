@@ -46,7 +46,7 @@ class CloudLED(CloudActuator):
     
     def ledThread(self):
         while True:
-            n = len(profiles[0])
+            n = len(self.profiles[0])
             if( n > 0 ):
                 t= time.localtime()
                 tNow = time.mktime(t)
@@ -61,7 +61,7 @@ class CloudLED(CloudActuator):
                 w = i_f - i_l # interpolation weight
                 
                 # interpolate brightness value by blending left and right samples using weight
-                b = profiles[0][i_l]*w + profiles[0][i_r]*(1.0-w)
+                b = self.profiles[0][i_l]*w + self.profiles[0][i_r]*(1.0-w)
                 # cap the brightness value to the limits
                 brightness = math.min(1.0,math.max(0.0,b))
                 
