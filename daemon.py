@@ -78,7 +78,7 @@ class CloudManagerThread(threading.Thread):
 			for i in range(0,8):
 				actuators.append(CloudRelay("relay" + str(i), cloud, i, last_data))
 
-		actuators.append(CloudLED("whiteLED", cloud, 0x43, last_data))
+		actuators.append(CloudLED("led", cloud, 0x43, last_data))
 		
 		print "Initializing rules manager..."
 		rulesManager = RulesManager("rules", cloud, last_data)
