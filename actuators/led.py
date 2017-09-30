@@ -14,6 +14,7 @@ class CloudLED(CloudActuator):
         self.address = address
         self.device = None
         self.dummy = 0
+        self.profiles = [][]
         if self.initDevice():
             initialValue = cloud.getValue(pulled_data, self.name)
             if initialValue is None:
@@ -25,7 +26,7 @@ class CloudLED(CloudActuator):
             self.state = initialValue
             self.changeValue(0, initialValue)
             
-            #self.thread.start()
+            self.thread.start()
         else:
             self.reportAvailability(False)
     
@@ -44,17 +45,31 @@ class CloudLED(CloudActuator):
         return False
     
     def ledThread(self):
-        startTime = time.time()
         while True:
-            t = time.time() - startTime
-            f = 0.2
-            brightness = (math.sin(2*math.pi*f*t)+1)*0.5
-            self.changeValue(0, brightness )
-            brightness = (math.sin(3*math.pi*f*t)+1)*0.5
-            self.changeValue(1, brightness)
-            brightness = (math.sin(4*math.pi*f*t)+1)*0.5
-            self.changeValue(2, brightness)
-            time.sleep(0.05)
+            n = len(profiles[0])
+            if( n > 0 ):
+                t= time.localtime()
+                tNow = time.mktime(t)
+                tStart = time.mktime((t.tm_year, t.tm_mon, t.tm_mday, 0, 0, 0, t.tm_wday, t.tm_yday, t.tm_isdst))
+                tSec = tNow - tStart # number of seconds elapsed since start of day
+                
+                # Convert current time to profile lookup indices for interpolation
+                t_frac = tSec/86400.0 # fraction of day that has elapsed, given 86400 seconds per day
+                i_f = n*t_frac #floating point index
+                i_l = math.floor(i_f) #left interp index
+                i_r = (i_l + 1) % n #right interp index with wraparound
+                w = i_f - i_l # interpolation weight
+                
+                # interpolate brightness value by blending left and right samples using weight
+                b = profiles[0][i_l]*w + profiles[0][i_r]*(1.0-w)
+                # cap the brightness value to the limits
+                brightness = math.min(1.0,math.max(0.0,b))
+                
+                # set the brightness value 
+                self.changeValue(0, brightness )
+                
+            time.sleep(1)
+            
         
     def changeValue(self, channel, duty):
         resolution = 4095.0
@@ -64,15 +79,22 @@ class CloudLED(CloudActuator):
         if(VERBOSE):
             print('%s chan %d was set to %s' % (self.name, channel, duty))
     
+    def applyProfile(self, channel, samples):
+        self.profiles[channel] = samples
+        
     def on_update(self, data):
         if VERBOSE:
             print('%s got update:' % self.name)
             print data
         
-        state = data['data']['status']
+        state = data['data']['state']
         if((state is not None) and (state is not self.state)):
             self.state = state
             self.changeValue(0, state)
+        
+        if( (data is not None) and ('profiles' in data) and ('ch0' in data['profiles'])):
+            self.applyProfile(0, data['profiles']['ch0'])
+            
             
             
         
