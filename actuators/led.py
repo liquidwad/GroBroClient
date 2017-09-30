@@ -14,7 +14,7 @@ class CloudLED(CloudActuator):
         self.address = address
         self.device = None
         self.dummy = 0
-        self.profiles = [][]
+        self.profiles = []
         if self.initDevice():
             initialValue = cloud.getValue(pulled_data, self.name)
             if initialValue is None:
