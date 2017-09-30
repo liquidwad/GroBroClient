@@ -86,6 +86,8 @@ class CloudLED(CloudActuator):
     
     def applyProfile(self, channel, samples):
         self.profiles[channel] = samples
+        print('Assigned profile to channel %d' % (channel))
+        print(samples)
         
     def on_update(self, data):
         if VERBOSE:
