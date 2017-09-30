@@ -27,7 +27,7 @@ class CloudLED(CloudActuator):
             self.changeValue(0, initialValue)
             
             # See if we have any profile data available
-            data = cloud.getTaggedData(pulled_data, channel, 'profiles');
+            data = cloud.getTaggedData(pulled_data, self.name, 'profiles');
             if( data is not None):
                 self.on_update(data)
             
