@@ -46,7 +46,12 @@ class CloudLED(CloudActuator):
     
     def ledThread(self):
         while True:
-            n = len(self.profiles[0])
+            n = 0
+            try:
+                n = len(self.profiles[0])
+            except Exception, e:
+                n = 0
+                
             if( n > 0 ):
                 t= time.localtime()
                 tNow = time.mktime(t)
