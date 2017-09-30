@@ -137,6 +137,18 @@ class CloudManager:
 				return data
 			
 		return None
+	
+	def getTaggedData(self, pulled_data, channel, tag):
+		if pulled_data is None:
+			return None
+		
+		for chan in pulled_data:
+			if chan['channel_name'] == channel:
+				if(tag in chan):
+					data = {tag: chan[tag]}
+					return data
+			
+		return None
 
 	def getDataFromCache(self, channel):
 		dat = None
