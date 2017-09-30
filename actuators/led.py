@@ -25,7 +25,7 @@ class CloudLED(CloudActuator):
             self.state = initialValue
             self.changeValue(0, initialValue)
             
-            self.thread.start()
+            #self.thread.start()
         else:
             self.reportAvailability(False)
     
