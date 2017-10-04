@@ -1,6 +1,9 @@
 from cloud import *
 from config import *
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except:
+    import pyA20.gpio as GPIO
 
 #Plug order
 # 14 18 24 8
